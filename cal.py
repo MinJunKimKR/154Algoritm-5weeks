@@ -1,4 +1,4 @@
-from tokenize import String
+#refer: https://zzsza.github.io/development/2020/06/06/github-action/
 from github_utils import get_github_repo, upload_github_issue
 from datetime import datetime
 import math
