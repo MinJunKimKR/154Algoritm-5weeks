@@ -266,7 +266,123 @@ for i in range(1,n+1):
             dp[i] = dp[i-sq] + 1
 print(dp[n])
         
-    
+#2133
+N = int(input())
+if(N%2 == 1): 
+    print(0)
+else:
+    N //= 2
+    sequence = [3,11]
+    if(N<3):
+        print(sequence[N-1])
+    else:
+        for i in range(2,N):
+            #sequence[i-1]*3 : first, +2 : last
+            pos = sequence[i-1]*3 + 2
+            for j in range(i-2,-1,-1):
+                pos += sequence[j] * 2
+            sequence.append(pos)
+        print(sequence[-1])
+        
+
+#9461
+#first 0 of sequence : padding
+T = int(input())
+N_list = []
+while(T):    
+    N_list.append(int(input()))
+    T -= 1
+max_num = max(N_list)
+sequence = [0,1,1,1,2,2]
+if(max_num<6) :
+    pass
+else:
+    for i in range(6,max_num+1):
+        sequence.append(sequence[i-1]+sequence[i-5])
+for num in N_list :
+    print(sequence[num])
+
+#2225
+#     N=1,2,3...
+# k=1[  1,1,1,1...]
+# k=2[  2,3,4,5...]
+# k=3[  3,6,10,15...]
+# k=4[  4,10,20,25...]
+N,K = map(int,input().split())
+dp = [[1]*N]
+for i in range(1,K):
+    dp.append([i+1] + [0]*(N-1))
+if(N>1 and K>1):
+    for m in range(1,K):
+        for n in range(1,N):
+            dp[m][n] = dp[m-1][n] + dp[m][n-1]
+print(dp[K-1][N-1]%1000000000)
+
+#2011
+#1000000으로 나눈 나머지를 출력한다.
+#암호를 해석할 수 없는 경우에는 0을 출력
+"""2개짜리 윈도우로 검사하는데 
+  뒤가0이면 해독가능한지 판단
+      가능하면 전전숫자만 가져오기
+  앞이0이면 전숫자만가져오기
+  두자리가 11~26이면 전숫자와 전전숫자더하기
+  두자리가 27~이면 전숫자만 가져오기
+"""
+password = input()
+length = len(password)
+if(password[0] == '0'):
+    print(0)
+elif(length == 1):
+    print(1)
+elif(length == 2):
+    if(int(password) < 27):
+        print(2)
+    elif(password[1] == '0'):
+        print(0)
+    else: print(1)
+else:
+    #first 1 is padding
+    dp = [1,1]
+    for i in range(length-1):
+        num = password[i:i+2]
+        #뒤가0이면 해독가능한지 판단 가능하면 전전숫자 추가 아니면 리턴
+        if(num[1] == '0'):
+            if(num[0] not in ['1','2']):
+                print(0)
+                break
+            else:
+                dp.append(dp[i])
+        else:
+            #앞이0이면 전숫자만가져오기
+            if(num[0] == '0'):
+                dp.append(dp[i+1])
+            #두자리가 11~26이면 전숫자와 전전숫자더하기
+            elif(int(num) < 27):
+                dp.append(dp[i]+dp[i+1])
+            #두자리가 27~이면 전숫자만 가져오기
+            else:
+                dp.append(dp[i+1])
+    if(len(dp) == length+1): print(dp[-1]%1000000)
+    print(dp)
+            
+#11052
+N = int(input())
+prices = list(map(int,input().split()))
+dp,length = [prices[0]], len(prices)
+for i in range(1,length):
+    maximum = prices[i]
+    for j in range(0,(i+1)//2):
+        maximum = max(maximum, dp[j] + dp[i-1-j])    
+    dp.append(maximum)
+print(dp[-1])
+
+
+
+
+
+
+
+
 
 
 
