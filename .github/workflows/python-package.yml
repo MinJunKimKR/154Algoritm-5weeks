@@ -32,3 +32,5 @@ jobs:
     - name: Run cal.py
       run: |
         python cal.py
+      env:
+        MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
