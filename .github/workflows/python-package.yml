@@ -6,7 +6,16 @@ name: day_conter
 on:
   schedule:
     - cron: '0 0 * * *'
-
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Person to greet"
+        required: true
+        default: "bossm0n5t3r"
+      home:
+        description: "location"
+        required: false
+        default: "The Octoverse"
 jobs:
   build:
     runs-on: ubuntu-latest
