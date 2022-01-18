@@ -3,7 +3,6 @@ from github_utils import get_github_repo, upload_github_issue
 from datetime import datetime
 import math
 import os
-access_token = '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'
 access_token = os.environ['MY_GITHUB_TOKEN']
 REPO_NAME = '154Algoritm-5weeks'
 PROB_CNT = 154
