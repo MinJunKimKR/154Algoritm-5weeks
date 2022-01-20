@@ -647,6 +647,408 @@ print(seq[K-1])
 
 
 
+#Stack, Queue, Deck
+
+#10828
+import sys
+N = int(sys.stdin.readline())
+stack = []
+def push(X):
+    stack.append(X)
+def pop():
+    if(stack):
+        print(stack.pop())
+    else:
+        print(-1)
+def size():
+    print(len(stack))
+def empty():
+    print(int(not bool(stack)))
+def top():
+    if(stack):
+        print(stack[-1])
+    else:
+        print(-1)
+
+for i in range(N):
+    order = sys.stdin.readline().split()
+    if(order[0] == 'push'):
+        push(int(order[1]))
+    elif(order[0] == 'pop'):
+        pop()
+    elif(order[0] == 'size'):
+        size()
+    elif(order[0] == 'empty'):
+        empty()
+    elif(order[0] == 'top'):
+        top()
+
+
+#9012 input하고 sys하고 차이를 정확히 알게해준 문제.
+import sys
+N = int(sys.stdin.readline())
+def isVPS(ps):    
+    stack = []
+    if(len(ps)%2 == 1):        
+        return print('NO')
+    for p in ps:
+        if(p == '('):
+            stack.append(p)
+        else:
+            if(stack):
+                stack.pop()
+            else:                
+                return print('NO')
+    if(stack):
+        return print('NO')
+    else:
+        return print('YES')
+for _ in range(N):
+    ps = sys.stdin.readline()
+    isVPS(ps[:-1])
+
+
+#10799
+#뒤괄호보고 레이저판단
+#레이저면 막대개수만큼 + 레이저아니면 막대시작이면 +1 막대끝이면 막대빼주기
+ps = input()
+stack, laser, output = [], 0, 0
+for i,p in enumerate(ps):
+    #앞선 검사에서 뒷괄호를 빼줘야한다고 기록해줬으면 빼주기.
+    if(laser):
+        laser = 0
+        continue
+    if(p=='('):
+        #레이저면 막대개수만큼 더하고 뒷괄호 빼줄준비.
+        if(ps[i+1] == ')'):
+            output += len(stack)
+            laser = 1
+        #막대 시작이면
+        else:
+            output += 1
+            stack.append(1)
+    else:
+        stack.pop()
+print(output)
+
+#스택을 숫자로 변경해서 좀더빠르고 메모리 좀더적음
+ps = input()
+stack, laser, output = 0, 0, 0
+for i,p in enumerate(ps):
+    #앞선 검사에서 뒷괄호를 빼줘야한다고 기록해줬으면 빼주기.
+    if(laser):
+        laser = 0
+        continue
+    if(p=='('):
+        #레이저면 막대개수만큼 더하고 뒷괄호 빼줄준비.
+        if(ps[i+1] == ')'):
+            output += stack
+            laser = 1
+        #막대 시작이면
+        else:
+            output += 1
+            stack += 1
+    else:
+        stack -= 1
+print(output)
+
+
+#10845
+import sys,collections
+N = int(sys.stdin.readline())
+queue = collections.deque([])
+def push(X):
+    queue.append(X)
+def pop():
+    if(queue):
+        print(queue.popleft())
+    else:
+        print(-1)
+def size():
+    print(len(queue))
+def empty():
+    print(int(not bool(queue)))
+def front():
+    if(queue):
+        print(queue[0])
+    else:
+        print(-1)
+def back():
+    if(queue):
+        print(queue[-1])
+    else:
+        print(-1)
+
+for _ in range(N):
+    order = sys.stdin.readline().split()
+    if(order[0] == 'push'):
+        push(int(order[1]))
+    elif(order[0] == 'pop'):
+        pop()
+    elif(order[0] == 'size'):
+        size()
+    elif(order[0] == 'empty'):
+        empty()
+    elif(order[0] == 'front'):
+        front()
+    elif(order[0] == 'back'):
+        back()
+
+#10866
+import sys,collections
+N = int(sys.stdin.readline())
+queue = collections.deque([])
+def push_front(X):
+    queue.appendleft(X)
+def push_back(X):
+    queue.append(X)
+def pop_front():
+    if(queue):
+        print(queue.popleft())
+    else:
+        print(-1)
+def pop_back():
+    if(queue):
+        print(queue.pop())
+    else:
+        print(-1)
+def size():
+    print(len(queue))
+def empty():
+    print(int(not bool(queue)))
+def front():
+    if(queue):
+        print(queue[0])
+    else:
+        print(-1)
+def back():
+    if(queue):
+        print(queue[-1])
+    else:
+        print(-1)
+
+for _ in range(N):
+    order = sys.stdin.readline().split()
+    if(order[0] == 'push_back'):
+        push_back(int(order[1]))
+    elif(order[0] == 'push_front'):
+        push_front(int(order[1]))
+    elif(order[0] == 'pop_back'):
+        pop_back()
+    elif(order[0] == 'pop_front'):
+        pop_front()
+    elif(order[0] == 'size'):
+        size()
+    elif(order[0] == 'empty'):
+        empty()
+    elif(order[0] == 'front'):
+        front()
+    elif(order[0] == 'back'):
+        back()
+
+
+
+#String
+import sys,collections
+a = sys.stdin.readline()
+
+#10808
+string = input()
+num_of_alpha,dic,output = [0]*26, {}, ''
+for i,alpha in enumerate('abcdefghijklmnopqrstuvwxyz'):
+    dic[alpha] = i
+for s in string:
+    num_of_alpha[dic[s]] += 1
+for num in num_of_alpha:
+    output += f'{num} '
+print(output)
+
+#10809
+string = input()
+num_of_alpha,dic,output = [-1]*26, {}, ''
+for i,alpha in enumerate('abcdefghijklmnopqrstuvwxyz'):
+    dic[alpha] = i
+for i,s in enumerate(string):
+    if(num_of_alpha[dic[s]] == -1):
+        num_of_alpha[dic[s]] = i
+for num in num_of_alpha:
+    output += f'{num} '
+print(output)
+
+
+#10820 다시풀면 rstrip() stdout활용하자.
+import sys
+string = sys.stdin.readline()
+while(string):
+    lower,upper,digit,space = 0,0,0,0
+    for s in string:
+        if(s.islower()):
+            lower += 1
+        elif(s.isupper()):
+            upper += 1
+        elif(s.isdigit()):
+            digit += 1
+        elif(s == ' '):
+            space += 1    
+    print(f'{lower} {upper} {digit} {space}')
+    string = ''
+    string = sys.stdin.readline()
+
+
+#2743
+string = input()
+print(len(string))
+
+#11655
+table = [['a', 'A'],
+ ['b', 'B'],
+ ['c', 'C'],
+ ['d', 'D'],
+ ['e', 'E'],
+ ['f', 'F'],
+ ['g', 'G'],
+ ['h', 'H'],
+ ['i', 'I'],
+ ['j', 'J'],
+ ['k', 'K'],
+ ['l', 'L'],
+ ['m', 'M'],
+ ['n', 'N'],
+ ['o', 'O'],
+ ['p', 'P'],
+ ['q', 'Q'],
+ ['r', 'R'],
+ ['s', 'S'],
+ ['t', 'T'],
+ ['u', 'U'],
+ ['v', 'V'],
+ ['w', 'W'],
+ ['x', 'X'],
+ ['y', 'Y'],
+ ['z', 'Z']]
+dic = {'a': 0,
+ 'A': 0,
+ 'b': 1,
+ 'B': 1,
+ 'c': 2,
+ 'C': 2,
+ 'd': 3,
+ 'D': 3,
+ 'e': 4,
+ 'E': 4,
+ 'f': 5,
+ 'F': 5,
+ 'g': 6,
+ 'G': 6,
+ 'h': 7,
+ 'H': 7,
+ 'i': 8,
+ 'I': 8,
+ 'j': 9,
+ 'J': 9,
+ 'k': 10,
+ 'K': 10,
+ 'l': 11,
+ 'L': 11,
+ 'm': 12,
+ 'M': 12,
+ 'n': 13,
+ 'N': 13,
+ 'o': 14,
+ 'O': 14,
+ 'p': 15,
+ 'P': 15,
+ 'q': 16,
+ 'Q': 16,
+ 'r': 17,
+ 'R': 17,
+ 's': 18,
+ 'S': 18,
+ 't': 19,
+ 'T': 19,
+ 'u': 20,
+ 'U': 20,
+ 'v': 21,
+ 'V': 21,
+ 'w': 22,
+ 'W': 22,
+ 'x': 23,
+ 'X': 23,
+ 'y': 24,
+ 'Y': 24,
+ 'z': 25,
+ 'Z': 25}
+string = input()
+output = ''
+for s in string:
+    if(s.isupper()):
+        output += table[(dic[s]+13)%26][1]
+    elif(s == ' ' or s.isdigit()):
+        output += s
+    else:
+        output += table[(dic[s]+13)%26][0]
+print(output)
+
+
+#10824
+nums = input().split()
+print(int(nums[0]+nums[1])+int(nums[2]+nums[3]))
+
+#11656
+string = input()
+subs = []
+for i in range(len(string)):
+    subs.append(string[i:])
+subs.sort()
+for sub in subs:
+    print(sub)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
