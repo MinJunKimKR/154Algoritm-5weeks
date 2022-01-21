@@ -5,3 +5,7 @@
 0118 : DP(30~49) 완료
 
 0119 : Sorting(50~58) 완료
+
+0120 : Stack, Queue, Deck, Strings(59~70) 완료
+
+0121 : Linked-Lists, mathematics
