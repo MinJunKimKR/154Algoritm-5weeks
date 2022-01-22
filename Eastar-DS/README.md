@@ -8,4 +8,6 @@
 
 0120 : Stack, Queue, Deck, Strings(59~70) 완료
 
-0121 : Linked-Lists, mathematics
+0121 : Linked-Lists(71~72), Mathematics(74~80) 완료
+
+0122 : Mathematics(81~91) 완료
