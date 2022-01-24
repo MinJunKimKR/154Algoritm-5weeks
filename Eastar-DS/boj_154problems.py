@@ -1,3 +1,6 @@
+#map(int,os.read(0, 100000000).decode('utf-8').split('\n'))
+
+
 #2557
 print("Hello World!")
 
@@ -1002,6 +1005,135 @@ for i in range(len(string)):
 subs.sort()
 for sub in subs:
     print(sub)
+
+
+
+
+#가희 알고리즘대
+#1
+#2n-1 : n에서 출발 2n: n+1도착
+city = 'Seoul Yeongdeungpo Anyang Suwon Osan Seojeongri Pyeongtaek Seonghwan Cheonan Sojeongni Jeonui Jochiwon Bugang Sintanjin Daejeon Okcheon Iwon Jitan Simcheon Gakgye Yeongdong Hwanggan Chupungnyeong Gimcheon Gumi Sagok Yangmok Waegwan Sindong Daegu Dongdaegu Gyeongsan Namseonghyeon Cheongdo Sangdong Miryang Samnangjin Wondong Mulgeum Hwamyeong Gupo Sasang Busan'
+d = '0.0 9.1 23.9 41.5 56.5 66.5 75.0 84.4 96.6 107.4 114.9 129.3 139.8 151.9 166.3 182.5 190.8 196.4 200.8 204.6 211.6 226.2 234.7 253.8 276.7 281.3 289.5 296.0 305.9 323.1 326.3 338.6 353.1 361.8 372.2 381.6 394.1 403.2 142.4 421.8 425.2 430.3 441.7'
+
+dic = {'Seoul': 0.0,  'Yeongdeungpo': 9.1,  'Anyang': 23.9,  'Suwon': 41.5,  'Osan': 56.5,
+ 'Seojeongri': 66.5,  'Pyeongtaek': 75.0,  'Seonghwan': 84.4,  'Cheonan': 96.6,  'Sojeongni': 107.4,
+ 'Jeonui': 114.9,  'Jochiwon': 129.3,  'Bugang': 139.8,  'Sintanjin': 151.9,  'Daejeon': 166.3,
+ 'Okcheon': 182.5,  'Iwon': 190.8,  'Jitan': 196.4,  'Simcheon': 200.8,  'Gakgye': 204.6,
+ 'Yeongdong': 211.6,  'Hwanggan': 226.2,  'Chupungnyeong': 234.7,  'Gimcheon': 253.8,  'Gumi': 276.7,
+ 'Sagok': 281.3, 'Yangmok': 289.5,  'Waegwan': 296.0,  'Sindong': 305.9,  'Daegu': 323.1, 
+ 'Dongdaegu': 326.3,  'Gyeongsan': 338.6,  'Namseonghyeon': 353.1,  'Cheongdo': 361.8,  'Sangdong': 372.2,
+ 'Miryang': 381.6,  'Samnangjin': 394.1,  'Wondong': 403.2,  'Mulgeum': 142.4,  'Hwamyeong': 421.8,
+ 'Gupo': 425.2, 'Sasang': 430.3, 'Busan': 441.7}
+city = ['Seoul',  'Yeongdeungpo',  'Anyang',  'Suwon',  'Osan',  'Seojeongri',  'Pyeongtaek',  'Seonghwan',
+ 'Cheonan',  'Sojeongni',  'Jeonui',  'Jochiwon',  'Bugang',  'Sintanjin',  'Daejeon',  'Okcheon',
+ 'Iwon',  'Jitan',  'Simcheon',  'Gakgye',  'Yeongdong',  'Hwanggan',  'Chupungnyeong',  'Gimcheon',
+ 'Gumi',  'Sagok',  'Yangmok',  'Waegwan',  'Sindong',  'Daegu',  'Dongdaegu',  'Gyeongsan',
+ 'Namseonghyeon',  'Cheongdo',  'Sangdong',  'Miryang',  'Samnangjin',  'Wondong',  'Mulgeum',  'Hwamyeong',
+ 'Gupo',  'Sasang',  'Busan']
+# 서울에서 부산코스주고 부산에서 서울가는시간 계산하라고하면?
+#dic_t의 첫도시와 끝도시 인덱스관계랑 질문의 첫도시와 끝도시 인덱스 관계가 같게설정하자.
+N,Q = map(int,(input().split()))
+dic_t,order = {},[]
+for _ in range(N):
+    c, e, s = input().split()
+    dic_t[c] = [e,s]
+for _ in range(Q):
+    s,e = input().split()
+    d = abs(dic[s] - dic[e])
+    tsh,tsm = map(float,dic_t[s][1].split(':'))
+    teh,tem = map(float,dic_t[e][0].split(':'))
+    ts = tsh + tsm/60
+    te = teh + tem/60
+    if(ts>te):
+        te+= 24
+    t = (te - ts)
+    print(d/t)
+
+#sys.stdin.readline
+import sys
+N,Q = map(int,(sys.stdin.readline().split()))
+dic_t = {}
+for _ in range(N):
+    c, e, s = sys.stdin.readline().split()
+    dic_t[c] = [e,s]
+for _ in range(Q):
+    s,e = sys.stdin.readline().split()
+    d = abs(dic[s] - dic[e])
+    tsh,tsm = map(int,dic_t[s][1].split(':'))
+    teh,tem = map(int,dic_t[e][0].split(':'))
+    tsh = float(tsh + tsm/60)
+    teh = float(teh + tem/60)
+    if(tsh>teh):
+        teh+= 24
+    print(d/(teh-tsh))
+
+
+
+
+
+
+
+
+
+
+#2
+#a+b 사이의 건물을 a앞에다 1로 쭉둔다.
+#차례대로 세우고 낮춘다.
+N, a, b = map(int,input().split())
+if(a+b < 2 or a+b > N+1):
+    print(-1)
+else:
+    output = ''
+    for _ in range(N-a-b+1):
+        output += ('1 ')
+    if(a>=b):
+        for i in range(1,a+1):
+            output += str(i)+ ' '
+        for j in range(b-1,0,-1):
+            output += str(j) + ' '
+    else:
+        for i in range(1,a):
+            output += str(i)+ ' '    
+        for j in range(b,0,-1):
+            output += str(j) + ' '
+    
+    print(output[:-1])
+
+N, a, b = map(int,input().split())
+if(a+b < 2 or a+b > N+1):
+    print(-1)
+elif(a!=1):
+    output = ''
+    for _ in range(N-a-b+1):
+        output += ('1 ')
+    if(a>=b):
+        for i in range(1,a+1):
+            output += str(i)+ ' '    
+        for j in range(b-1,0,-1):
+            output += str(j) + ' '
+    else:
+        for i in range(1,a):
+            output += str(i)+ ' '    
+        for j in range(b,0,-1):
+            output += str(j) + ' '    
+    print(output[:-1])
+else:
+    output = str(b) + ' '
+    for _ in range(N-a-b+1):
+        output += ('1 ')
+    for j in range(b-1,0,-1):
+        output += str(j) + ' '
+    print(output[:-1])
+
+
+#a 가 1인경우!!!!!
+#8 1 5
+
+
+
+
+
+
 
 
 
