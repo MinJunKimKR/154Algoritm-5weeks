@@ -100,6 +100,98 @@ for i in range(n):
 print(output)
 
 
+#1707 삼각형이 있나로 판단하면될듯.
+import sys, collections
+K = int(input())
+for _ in range(K):
+    V,E = map(int,input().split())
+    graph,visited = collections.defaultdict(list),[]
+    def existTri():
+        for key in list(graph):
+            nodes = graph[key]
+            for node in nodes:
+                if(node in visited):
+                    continue
+                second_nodes = graph[node]
+                for second_node in second_nodes:
+                    if(second_node in visited):
+                        continue
+                    if(key in graph[second_node]):
+                        print('NO')
+                        return
+            visited.append(key)
+        return print('YES')
+    for _ in range(E):
+        u,v = map(int,input().split())
+        graph[u].append(v)
+        graph[v].append(u)
+    existTri()
+    # for key in list(graph):
+    #     nodes = graph[key]
+    #     for node in nodes:
+    #         if(node in visited):
+    #             continue
+    #         second_nodes = graph[node]
+    #         for second_node in second_nodes:
+    #             if(second_node in visited):
+    #                 continue
+    #             if(key in graph[second_node]):
+    #                 print('NO')
+    #                 break
+    #     visited.append(key)
+    # print('YES')
+
+import sys, collections
+K = int(sys.stdin.readline())
+for _ in range(K):
+    V,E = map(int,sys.stdin.readline().split())
+    graph,visited = collections.defaultdict(list),[]
+    def existTri():
+        for key in list(graph):
+            nodes = graph[key]
+            for node in nodes:
+                if(node in visited):
+                    continue
+                second_nodes = graph[node]
+                for second_node in second_nodes:
+                    if(second_node in visited):
+                        continue
+                    if(key in graph[second_node]):
+                        print('NO')
+                        return
+            visited.append(key)
+        return print('YES')
+    for _ in range(E):
+        u,v = map(int,sys.stdin.readline().split())
+        graph[u].append(v)
+        graph[v].append(u)
+    existTri()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
