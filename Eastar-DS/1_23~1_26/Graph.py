@@ -100,76 +100,89 @@ for i in range(n):
 print(output)
 
 
-#1707 삼각형이 있나로 판단하면될듯.
+#1707 삼각형이 있나로 판단하면될듯. sys.stdin.readline
+#2그룹으로 나누기
 import sys, collections
 K = int(input())
 for _ in range(K):
     V,E = map(int,input().split())
-    graph,visited = collections.defaultdict(list),[]
+    graph= collections.defaultdict(list)
+    group = [0] * (V+1)
     def existTri():
-        for key in list(graph):
+        queue = collections.deque([list(graph)[0]])
+        for key in sorted(list(graph)):
             nodes = graph[key]
-            for node in nodes:
-                if(node in visited):
-                    continue
-                second_nodes = graph[node]
-                for second_node in second_nodes:
-                    if(second_node in visited):
-                        continue
-                    if(key in graph[second_node]):
-                        print('NO')
-                        return
-            visited.append(key)
+            #첫그룹 1
+            if(group[key] == 0):
+                group[key] = 1
+            if(group[key] == 1):
+                for node in nodes:
+                    if(group[node] == 1):
+                        return print('NO')
+                    group[node] = -1
+            else:
+                for node in nodes:
+                    if(group[node] == -1):
+                        return print('NO')
+                    group[node] = 1             
         return print('YES')
     for _ in range(E):
         u,v = map(int,input().split())
-        graph[u].append(v)
-        graph[v].append(u)
+        if(u < v):
+            graph[u].append(v)
+        else:
+            graph[v].append(u)
     existTri()
-    # for key in list(graph):
-    #     nodes = graph[key]
-    #     for node in nodes:
-    #         if(node in visited):
-    #             continue
-    #         second_nodes = graph[node]
-    #         for second_node in second_nodes:
-    #             if(second_node in visited):
-    #                 continue
-    #             if(key in graph[second_node]):
-    #                 print('NO')
-    #                 break
-    #     visited.append(key)
-    # print('YES')
 
+
+
+#시간초과
 import sys, collections
-K = int(sys.stdin.readline())
+K = int(input())
 for _ in range(K):
-    V,E = map(int,sys.stdin.readline().split())
-    graph,visited = collections.defaultdict(list),[]
+    V,E = map(int,input().split())
+    graph= collections.defaultdict(list)
     def existTri():
-        for key in list(graph):
-            nodes = graph[key]
-            for node in nodes:
-                if(node in visited):
-                    continue
-                second_nodes = graph[node]
-                for second_node in second_nodes:
-                    if(second_node in visited):
-                        continue
-                    if(key in graph[second_node]):
-                        print('NO')
-                        return
-            visited.append(key)
+        for key in sorted(list(graph)):
+            nodes = sorted(graph[key])
+            length = len(graph[key])
+            for i in range(length-1):
+                for j in range(i+1,length):
+                    if(nodes[j] in graph[nodes[i]]):
+                        return print('NO')                        
         return print('YES')
     for _ in range(E):
-        u,v = map(int,sys.stdin.readline().split())
-        graph[u].append(v)
-        graph[v].append(u)
+        u,v = map(int,input().split())
+        if(u < v):
+            graph[u].append(v)
+        else:
+            graph[v].append(u)
     existTri()
 
 
-
-
+#메모리초과
+import sys
+K = int(input())
+for _ in range(K):
+    V,E = map(int,input().split())
+    graph= [[0]*(V-i) for i in range(V)]
+    def existTri():
+        if(V in [1,2]):
+            return print('YES')
+        for key in range(V):
+            for i in range(key+1, V - 1):
+                if(graph[key][i-key] == 1):
+                    for j in range(i+1,V):
+                        if(graph[key][j-key] ==1 and graph[i][j-i] == 1):
+                            return print('NO')                        
+        return print('YES')
+    for _ in range(E):
+        u,v = map(int,input().split())
+        if(u<v):
+            graph[u-1][v-u] = 1
+        else:
+            graph[v-1][u-v] = 1
+    existTri()
 
 
 
