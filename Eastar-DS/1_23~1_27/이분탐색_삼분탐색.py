@@ -43,11 +43,37 @@ while(l < r):
 print(l)
 
 
+#2805
+import sys,math
+N,M = map(int,input().split())
+trees = list(map(int,input().split()))
+l,r = 0,max(trees)
+while(l<r):
+    m = math.floor(r/2+l/2)
+    summ = sum([num-m for num in trees if num > m])
+    if(summ >= M):
+        l = m
+    else:
+        r = m
+    if(l == (r-1)):
+        break
+print(l)
+    
 
-
-
-
-
+import sys,math
+N,M = map(int,sys.stdin.readline().split())
+trees = list(map(int,sys.stdin.readline().split()))
+l,r = 0,max(trees)
+while(l<r):
+    m = math.floor(r/2+l/2)
+    summ = sum([num-m for num in trees if num > m])
+    if(summ >= M):
+        l = m
+    else:
+        r = m
+    if(l == (r-1)):
+        break
+print(l)
 
 
 
