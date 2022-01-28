@@ -165,6 +165,7 @@ for num in nums:
         output += '0 '
 print(output[:-1])
 
+
 #빠른풀이 ㄷㄷ; set하나에 나는 안되고 얘는 된다고?
 import sys
 input = sys.stdin.readline
@@ -178,6 +179,7 @@ def Test():
             res +="0 "
     print(res)
 Test()
+
 
 #시간초과
 import sys
