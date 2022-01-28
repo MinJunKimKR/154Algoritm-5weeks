@@ -76,11 +76,57 @@ while(l<r):
 print(l)
 
 
+#2110
+import sys
+N,C = map(int,input().split())
+home = []
+for _ in range(N):
+    home.append(int(input()))
+home.sort()
+l,r = 1,(home[0]+home[-1])//(C-1) + 1
+while(l<r):
+    now,length = home[0],1
+    m = (l+r)//2
+    for h in home[1:]:
+        if(h >= now+m):
+            length += 1
+            now = h
+        if(length == C):
+            l = m
+            break
+    if(length >= C):
+        l = m
+    else:
+        r = m
+    if(l == r-1):
+        break
+print(l)
 
 
-
-
-
+import sys
+N,C = map(int,sys.stdin.readline().split())
+home = []
+for _ in range(N):
+    home.append(int(sys.stdin.readline()))
+home.sort()
+l,r = 1,(home[0]+home[-1])//(C-1) + 1
+while(l<r):
+    now,length = home[0],1
+    m = (l+r)//2
+    for h in home[1:]:
+        if(h >= now+m):
+            length += 1
+            now = h
+        if(length == C):
+            l = m
+            break
+    if(length >= C):
+        l = m
+    else:
+        r = m
+    if(l == r-1):
+        break
+print(l)
 
 
 
