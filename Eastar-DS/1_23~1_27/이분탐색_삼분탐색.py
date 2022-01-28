@@ -129,6 +129,75 @@ while(l<r):
 print(l)
 
 
+#10815 sys.stdin.readline
+import time
+start = time.time()
+end = time.time()
+print("time:", end-start)
+
+import sys
+N = int(input())
+sang = sorted(list(map(int,input().split())))
+sang += [sang[-1]+1]
+M = int(input())
+nums = list(map(int,input().split()))
+output = ''
+
+def bs(num):
+    l,r = 0, N
+    if(num<sang[l] or num>sang[r]-1):
+        return False
+    while(l < r-1):
+        m = (l+r)//2
+        if(num >= sang[m]):
+            l = m
+        else:
+            r = m
+    if(sang[l] == num):
+        return True
+    else:
+        return False
+    
+for num in nums:    
+    if bs(num):
+        output += '1 '
+    else:
+        output += '0 '
+print(output[:-1])
+
+#빠른풀이 ㄷㄷ; set하나에 나는 안되고 얘는 된다고?
+import sys
+input = sys.stdin.readline
+def Test():
+    n,tmp,m = input(),set(input().split()),input()
+    res = ""
+    for i in input().split():
+        if i in tmp:
+            res +="1 "
+        else:
+            res +="0 "
+    print(res)
+Test()
+
+#시간초과
+import sys
+N = int(input())
+sang = sorted(list(map(int,input().split())))
+M = int(input())
+nums = list(map(int,input().split()))
+output = ''
+for num in nums:
+    if(num in sang):
+        output += '1 '
+    else:
+        output += '0 '
+print(output[:-1])
+
+
+
+
+
+
 
 
 
