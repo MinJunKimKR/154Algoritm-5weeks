@@ -197,17 +197,29 @@ print(output[:-1])
 
 
 
+#10816
+import sys
+input = sys.stdin.readline    
+import collections
+N = int(input())
+nums1 = input().split()
+M = int(input())
+nums2 = input().split()
+counter = collections.Counter(nums1)
+print(' '.join(f'{counter[m]}' if m in counter else '0' for m in nums2))
 
-
-
-
-
-
-
-
-
-
-
+#시간초과
+N = int(input())
+nums1 = input().split()
+M = int(input())
+nums2 = input().split()
+output = [0]*M
+for num in nums1:
+    try:
+        output[nums2.index(num)] += 1
+    except:
+        pass
+print(' '.join([str(n) for n in output]))
 
 
 
