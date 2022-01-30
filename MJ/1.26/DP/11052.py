@@ -1,7 +1,7 @@
 # 12:04 -> 12:34
 # 12:33 [GG]
 # 12:40 -> 01:10
-# 12:455 -> [Success]
+# 12:45 -> [Success]
 N = int(input())
 P = list(map(int, input().split()))
 P = [0] +P
