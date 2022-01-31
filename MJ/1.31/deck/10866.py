@@ -1,5 +1,5 @@
 # 12:21 -> 12:51
-# 12:31 [SUCCESS]
+# 12:31 [SUCCESS ]
 from collections import deque
 import sys
 sys_input = sys.stdin.readline
