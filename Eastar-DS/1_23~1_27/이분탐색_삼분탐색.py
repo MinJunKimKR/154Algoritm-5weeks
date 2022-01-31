@@ -223,6 +223,34 @@ print(' '.join([str(n) for n in output]))
 
 
 
+#11662 삼분탐색을 공부했다.
+import sys
+input = sys.stdin.readline
+ax,ay,bx,by,cx,cy,dx,dy = map(int,input().split())
+l,r = 0,1
+while((r-l)>0.00000001):
+    ll,rr = l+(r-l)/3, l+(r-l)/1.5
+    d1,d2 = (((ax+(bx-ax)/3) - (cx+(dx-cx)/3))**2 + ((ay+(by-ay)/3) - (cy+(dy-cy)/3))**2)**0.5, (((ax+(bx-ax)/1.5) - (cx+(dx-cx)/1.5))**2 + ((ay+(by-ay)/1.5) - (cy+(dy-cy)/1.5))**2)**0.5
+    if(d1 >= d2):
+        l = ll
+        ax,ay,cx,cy = ax+(bx-ax)/3, ay+(by-ay)/3, cx+(dx-cx)/3, cy+(dy-cy)/3
+    else:
+        r = rr
+        bx,by,dx,dy = ax+(bx-ax)/1.5, ay+(by-ay)/1.5, cx+(dx-cx)/1.5, cy+(dy-cy)/1.5
+print(d1)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
