@@ -20,12 +20,6 @@ todayStr = str(today).split()[0]
 title = f"{todayStr} 알고리즘 진행도 알림!"
 content = f"<h1>오늘도 화이팅입니다! D-{dDay}</h1><h3>현재 스터디 진행도 : {progress}%</h3><h3>권장 현재 문제번호 : {recommendNum} </h3><br/>\n"
 
-# print((passedDayCnt/TOTAL_DAYS) * 100)
-# print((today-startDate).days)
-# print(math.ceil(dailyProbCnt * passedDayCnt))
-
-# print(str(today).split()[0])
-# print(content)
 repo = get_github_repo(access_token, REPO_NAME)
 upload_github_issue(repo, title, content)
 print("Upload Github Issue Success!")
