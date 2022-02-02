@@ -15,3 +15,19 @@ while(K > 0):
         K %= p
     N-=1
 print(output)
+
+
+#2875
+import sys
+input = sys.stdin.readline
+n,m,k = map(int,input().split())
+maxteam = min(n//2, m)
+n -= 2*maxteam
+m -= maxteam
+k -= (n+m)
+if(k>0):
+    maxteam -= k//3
+    k %= 3
+if(k>0):
+    maxteam -= 1
+print(maxteam)
