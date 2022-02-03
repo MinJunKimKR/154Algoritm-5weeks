@@ -1,0 +1,41 @@
+#1260
+#dfs와 bfs
+from collections import deque
+#bfs가 큐
+#dfs가 재귀호출.(스택)
+
+n, m, v = map(int, input().split()) #정점 개수, 간선개수, 탐색시작 정점 번호
+s = [[0 for x in range(n+1)] for i in range(n + 1)]
+visit = [0 for i in range(n + 1)] #방문 체크
+
+for i in range(m):
+    x, y = map(int, input().split())
+    s[x][y] = 1
+    s[y][x] = 1 #연결 체크
+    
+def dfs(v):
+    print(v,end=' ')
+    visit[v]=1 #방문 처리
+    for i in range(1,n+1):
+        if visit[i]==False and s[v][i]==1: #방문 안했고 연결되어있으면
+            dfs(i)
+            
+
+def bfs(v):
+    
+    queue=deque()
+    queue.append(v)
+    visit[v]=1
+    
+    while(queue):
+        temp=queue.popleft()
+        print(temp,end=' ')
+        for i in range(1,n+1):
+            if visit[i]==False and s[temp][i]==1:
+                queue.append(i)
+                visit[i]=1
+
+dfs(v)
+print()
+visit = [0 for i in range(n + 1)] #방문 체크
+bfs(v)
