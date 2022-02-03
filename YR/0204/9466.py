@@ -4,7 +4,7 @@
 #이건 누가봐도 dfs or bfs.
 #cycle을 이루냐 안이루냐를 판단하는 과정이 어려웠음..ㅜㅜ
 import sys
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(1000000)
 
 number=int(input())
 for _ in range(number):
