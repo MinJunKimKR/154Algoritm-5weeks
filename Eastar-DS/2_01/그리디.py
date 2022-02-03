@@ -31,3 +31,21 @@ if(k>0):
 if(k>0):
     maxteam -= 1
 print(maxteam)
+
+#10610
+n = input()
+if('0' not in n):
+    print(-1)
+else:
+    if(sum([int(a) for a in n])%3 != 0):
+        print(-1)
+    else:
+        print(''.join(sorted(n, key = lambda x : int(x) ,reverse = True)))
+
+
+
+
+
+
+
+
