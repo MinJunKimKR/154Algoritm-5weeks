@@ -28,3 +28,12 @@ def isPrime(x):
         if(x%i == 0):
             return False
     return True
+
+
+# if else문 두번째 for문 안에 첫번째 for문의 인자를 사용해야 else가 제대로 작동하는듯.
+for i in range(12):
+    for s in str(i):
+        if '1' in s:
+            break
+    else:
+        print(i)
