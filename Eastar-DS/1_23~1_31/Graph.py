@@ -185,13 +185,34 @@ for _ in range(K):
     existTri()
 
 
+#10451
+import sys
+input = sys.stdin.readline
+T = int(input())
+for _ in range(T):
+    N = int(input())
+    nums = list(int(n) - 1 for n in input().split())
+    visited,output = [0]*N, 0
+    for i,num in enumerate(nums):
+        if(visited[i] == 0):
+            output += 1
+            while(visited[i] == 0):
+                visited[i] = 1
+                i = nums[i]
+    print(output)
 
-
-
-
-
-
-
+#최고로 줄인거
+import sys
+for _ in range(int(sys.stdin.readline())):
+    visited,output = [0]*int(sys.stdin.readline()), 0
+    nums = list(int(n) - 1 for n in sys.stdin.readline().split())    
+    for i,num in enumerate(nums):
+        if(visited[i] == 0):
+            output += 1
+            while(visited[i] == 0):
+                visited[i] = 1
+                i = nums[i]
+    print(output)
 
 
 
