@@ -215,8 +215,16 @@ for _ in range(int(sys.stdin.readline())):
     print(output)
 
 
+#2331
+A,P = map(int,input().split())
+D = []
+while(A not in D):
+    D.append(A)
+    A = sum([int(a)**P for a in str(A)])
+print(D.index(A))
 
 
+#9466
 
 
 
