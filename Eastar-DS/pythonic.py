@@ -37,3 +37,30 @@ for i in range(12):
             break
     else:
         print(i)
+
+
+#global을 이용하면 함수안에서 바깥의 변수사용가능
+test = 0
+def testFtn():
+    global test
+    test += 3
+testFtn()
+print(test)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
