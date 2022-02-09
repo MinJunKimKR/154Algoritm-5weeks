@@ -224,11 +224,30 @@ while(A not in D):
 print(D.index(A))
 
 
-#9466
-
-
-
-
+#9466 개어렵네 진짜ㅏㅏㅏ global이라는 좋은기능을 알았따!!!
+import sys
+sys.setrecursionlimit(200000)
+def dfs(i):
+    visited[i] = 1
+    cycle.append(i)
+    if(visited[nums[i]] == 1):
+        if(nums[i] in cycle):
+            # output += len(cycle[cycle.index(nums[i]):])
+            output.append(len(cycle[cycle.index(nums[i]):]))
+        return
+    else:
+        dfs(nums[i])
+# input = sys.stdin.readline
+for _ in range(int(input())):
+    n = int(input())
+    nums = [0] + list(map(int,input().split()))
+    visited = [1]+[0]*n
+    output = []
+    for i in range(1,n+1):
+        if(visited[i] ==0):
+            cycle = []
+            dfs(i)
+    print(n-sum(output))
 
 
 
