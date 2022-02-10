@@ -250,6 +250,117 @@ for _ in range(int(input())):
     print(n-sum(output))
 
 
+#2667
+def isConnected(i,j,o):
+    #연결된거 0으로 바꿔주면서 넓이체크
+    if(i<0 or i>N-1 or j<0 or j>N-1 or nums[i][j] == 0):
+        return o
+    o += 1
+    nums[i][j] = 0
+    o = isConnected(i-1,j,o)
+    o = isConnected(i+1,j,o)
+    o = isConnected(i,j-1,o)
+    o = isConnected(i,j+1,o)
+    return o
+N = int(input())
+nums,output = [],[]
+for _ in range(N):
+    nums.append([int(s) for s in list(input())])
+for i in range(N):
+    for j in range(N):
+        if(nums[i][j] == 1):
+            output.append(isConnected(i,j,0))
+output.sort()
+print(len(output))
+for num in output:
+    print(num)
+
+
+# [[0, 1, 1, 0, 1, 0, 0],
+#  [0, 1, 1, 0, 1, 0, 1],
+#  [1, 1, 1, 0, 1, 0, 1],
+#  [0, 0, 0, 0, 1, 1, 1],
+#  [0, 1, 0, 0, 0, 0, 0],
+#  [0, 1, 1, 1, 1, 1, 0],
+#  [0, 1, 1, 1, 0, 0, 0]]
+
+
+#4963
+import sys
+sys.setrecursionlimit(10000)
+input = sys.stdin.readline
+def isLand(i,j):
+    if(i<0 or i>h-1 or j<0 or j>w-1 or nums[i][j] == 0):
+        return
+    nums[i][j] = 0
+    isLand(i+1,j)
+    isLand(i,j+1)    
+    isLand(i+1,j+1)
+    isLand(i-1,j+1)   
+    isLand(i+1,j-1)
+    isLand(i,j-1)
+    isLand(i-1,j)
+    isLand(i-1,j-1)
+    return
+    
+while(1):
+    w,h = map(int,input().split())
+    if(w==0 and h==0):
+        break
+    nums = []
+    for _ in range(h):
+        nums.append(list(map(int,input().split())))
+    #
+    output = 0
+    for i in range(h):
+        for j in range(w):
+            if(nums[i][j] == 1):
+                isLand(i,j)
+                output += 1
+    print(output)
+
+
+#7576
+import sys, collections
+input = sys.stdin.readline
+M,N = map(int,input().split())
+nums,queue,day = [], collections.deque([]),0
+for i in range(N):
+    line = list(map(int,input().split()))
+    nums.append(line)
+    for j in range(M):
+        if line[j] == 1:
+            queue.append([i,j,0])
+#
+def makeRipe(que):
+    i,j,d = que
+    if i>0 and nums[i-1][j]==0:
+        nums[i-1][j] = 1
+        queue.append([i-1,j,d+1])
+    if j>0 and nums[i][j-1]==0:
+        nums[i][j-1] = 1
+        queue.append([i,j-1,d+1])
+    if i<N-1 and nums[i+1][j]==0:
+        nums[i+1][j] = 1
+        queue.append([i+1,j,d+1])
+    if j<M-1 and nums[i][j+1]==0:
+        nums[i][j+1] = 1
+        queue.append([i,j+1,d+1])
+    return d
+#
+while(queue):
+    que = queue.popleft()
+    day = makeRipe(que)
+#익지 못하는 토마토가 있는경우
+for line in nums:
+    for num in line:
+        if(num == 0):
+            print(-1)
+            exit()
+print(day)
+
+
+
 
 
 
