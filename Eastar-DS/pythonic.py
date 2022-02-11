@@ -48,9 +48,11 @@ testFtn()
 print(test)
 
 
-
-
-
+#List Comprehension
+#if, else를 쓰고싶으면 앞쪽에.
+[int(s) if s != ' ' else 0 for s in '1 2 3']
+#if만쓰고싶으면 뒤쪽에.
+[int(s) for s in '1 2 3' if s != ' ']
 
 
 
