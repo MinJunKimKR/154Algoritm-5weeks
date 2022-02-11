@@ -361,17 +361,151 @@ print(day)
 
 
 
+#2178
+import sys, collections
+input = sys.stdin.readline
+N,M = map(int,input().split())
+graph,queue,visited = [], collections.deque([[0,0,1]]),[]
+for _ in range(N):
+    graph.append([int(s) for s in input().rstrip()])
+def bfs(i,j,c):
+    if(i<N-1 and graph[i+1][j] == 1):
+        queue.append([i+1,j,c+1])
+    if(j<M-1 and graph[i][j+1] == 1):
+        queue.append([i,j+1,c+1])
+    if(j>0 and graph[i][j-1] == 1):
+        queue.append([i,j-1,c+1])
+    if(i>0 and graph[i-1][j] == 1):
+        queue.append([i-1,j,c+1])
+while(queue):
+    i,j,c = queue.popleft()
+    if([i,j] in visited):
+        continue
+    if([i,j] == [N-1,M-1]):
+        print(c)
+        break
+    visited.append([i,j])
+    bfs(i,j,c)
 
 
+#2146
+import sys, collections
+sys.setrecursionlimit(10000)
+input = sys.stdin.readline
+N = int(input())
+graph,queue = [],collections.deque([])
+for _ in range(N):
+    graph.append([int(s) for s in input().split()])
+#섬을 번호로 나누고 큐에 좌표추가
+def makeIsland(i,j,n):
+    graph[i][j] = [n,0]
+    queue.append([i,j])
+    if(i>0 and graph[i-1][j] == 1):
+        makeIsland(i-1,j,n)
+    if(j>0 and graph[i][j-1] == 1):
+        makeIsland(i,j-1,n)
+    if(i<N-1 and graph[i+1][j] == 1):
+        makeIsland(i+1,j,n)
+    if(j<N-1 and graph[i][j+1] == 1):
+        makeIsland(i,j+1,n)
+n=2
+for i in range(N):
+    for j in range(N):
+        if(graph[i][j] == 1):
+            makeIsland(i,j,n)
+            n += 1
+
+def expandIsland(i,j):
+    n,d = graph[i][j]
+    if(i>0 and graph[i-1][j] == 0):
+        graph[i-1][j] = [n,d+1]
+        queue.append([i-1,j])
+    elif(i>0 and graph[i-1][j][0] != n):
+        return graph[i-1][j][1]
+    
+    if(j>0 and graph[i][j-1] == 0):
+        graph[i][j-1] = [n,d+1]
+        queue.append([i,j-1])
+    elif(j>0 and graph[i][j-1][0] != n):
+        return graph[i][j-1][1]  
+    
+    if(i<N-1 and graph[i+1][j] == 0):
+        graph[i+1][j] = [n,d+1]
+        queue.append([i+1,j])
+    elif(i<N-1 and graph[i+1][j][0] != n):
+        return graph[i+1][j][1]
+    
+    if(j<N-1 and graph[i][j+1] == 0):
+        graph[i][j+1] = [n,d+1]
+        queue.append([i,j+1])
+    elif(j<N-1 and graph[i][j+1][0] != n):
+        return graph[i][j+1][1]
+    return -1
+output = 200
+while(queue):
+    i,j = queue.popleft()
+    check = expandIsland(i,j)
+    if(check != -1):
+        output = min(output, check + graph[i][j][1])        
+print(output)
+
+#반례
+# 1 0 0 0 1
+# 0 0 0 0 0
+# 0 0 0 0 0
+# 0 0 0 0 0
+# 1 1 0 0 1
 
 
+#1991
+class TreeNode:
+    def __init__(self,val,left=None,right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+graph = []
+for _ in range(int(input())):
+    v,l,r = input().split()
+    graph.append(TreeNode(v,TreeNode(l),TreeNode(r)))
 
+#트리완성
+for i, node in enumerate(graph[:-1]):
+    if(node.left.val != '.'):
+        for next_node in graph[i+1:]:
+            if(next_node.val == node.left.val):
+                node.left = next_node
+    if(node.right.val != '.'):
+        for next_node in graph[i+1:]:
+            if(next_node.val == node.right.val):
+                node.right = next_node
 
+def pre(root):
+    global o1
+    o1 += root.val
+    if root.left.val != '.':
+        pre(root.left)
+    if root.right.val != '.':
+        pre(root.right)
+def mid(root):
+    global o2
+    if root.left.val != '.':
+        mid(root.left)
+    o2 += root.val
+    if root.right.val != '.':
+        mid(root.right)
+def post(root):
+    global o3
+    if root.left.val != '.':
+        post(root.left)    
+    if root.right.val != '.':
+        post(root.right)
+    o3 += root.val
 
-
-
-
-
+root,o1,o2,o3 = graph[0],'','',''
+pre(root)
+mid(root)
+post(root)
+print('\n'.join([o1,o2,o3]))
 
 
 
