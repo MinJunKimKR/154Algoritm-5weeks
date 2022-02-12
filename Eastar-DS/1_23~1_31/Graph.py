@@ -508,6 +508,93 @@ post(root)
 print('\n'.join([o1,o2,o3]))
 
 
+#11725
+import sys, collections
+input = sys.stdin.readline
+N = int(input())
+graph = collections.defaultdict(list)
+for _ in range(N-1):
+    k,v = map(int, input().split())
+    graph[v].append(k)
+    graph[k].append(v)
+
+root,queue = [1] + [0] * (N-1), collections.deque([1])
+while(queue):
+    que = queue.popleft()
+    for value in graph[que]:
+        if not root[value-1]:
+            queue.append(value)
+            root[value-1] = que
+print('\n'.join(map(str,root[1:])))            
+
+# root,visited,queue = [0] * (N-1), [1] + [0] * N, collections.deque([1])
+# while(queue):
+#     que = queue.popleft()
+#     for value in graph[que]:
+#         if not visited[value-1]:
+#             queue.append(value)
+#             root[value-2] = que
+#             visited[value-1] = 1
+# print('\n'.join(map(str,root[])))
+
+
+#1167
+# 연결된점이 하나인곳에서만 시작하자. => 첫 정점에서 제일먼곳에서 다시 dfs한번하면 그게답이라고함.
+# 나중에 다시풀자 ㅅ
+import sys, collections
+input = sys.stdin.readline
+sys.setrecursionlimit(1000000)
+graph = collections.defaultdict(list)
+V = int(input())
+for _ in range(V):
+    tmp = list(map(int,input().split()))[:-1]
+    v = tmp[0]
+    for i in range(1,len(tmp[1:]),2):
+        graph[v].append([tmp[i],tmp[i+1]])
+def dfs(key,before): 
+    out,node = 0,0
+    for value in graph[key]:
+        if value[0] != before:
+            tmp_out,tmp_node = dfs(value[0],key)
+            tmp_out += value[1]
+            if(tmp_out > out):
+                out,node = tmp_out, tmp_node
+        else:
+            node = key
+    return [out,node]
+output,node = dfs(1,0)
+output,node = dfs(node,0)
+print(output)
+
+
+#1967 아니 이건 맞는데 왜 위에껀 안맞는거야 씨빠업ㄹ야롬내ㅑ올ㄴ먀ㅐㅗ
+import sys, collections
+sys.setrecursionlimit(100000)
+input = sys.stdin.readline
+graph = collections.defaultdict(list)
+for _ in range(int(input()) - 1):
+    v1,v2,d = map(int,input().split())
+    graph[v1].append([v2,d])
+    graph[v2].append([v1,d])
+def dfs(key,before):
+    out,node = 0,0
+    for value in graph[key]:
+        if value[0] != before:
+            tmp_out,tmp_node = dfs(value[0],key)
+            tmp_out += value[1]
+            if(tmp_out > out):
+                out,node = tmp_out, tmp_node
+        else:
+            node = key
+    return [out,node]
+output,node = dfs(1,0)
+output,node = dfs(node,0)
+print(output)
+
+
+
+
+
 
 
 
