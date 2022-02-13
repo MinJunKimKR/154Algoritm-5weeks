@@ -1,0 +1,81 @@
+#1451
+#골드5
+
+#3개의 직사각형으로 나누는걸 어떻게 구현하지?
+#직사각형을 3개의 작은 직사각형으로 나누는 방법은 총 6가지.
+#6가지 경우의 수를 모두 탐색.
+
+n,m=map(int,input().split())
+
+arr=[[0 for _ in range(m + 1)]]
+for i in range(n):
+    arr.append([0] + list(map(int, list(input()))))
+
+ans=0
+
+sum=[[0 for _ in range(m + 1)]for i in range(n+1)]
+#합을 저장할 리스트
+
+#영역내 모든수의 합을 계산..
+for i in range(1,n+1):
+    for j in range(1,m+1):
+        sum[i][j]=sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1]+arr[i][j]
+
+def sum_cal(x1,y1,x2,y2):
+    return sum[x2][y2]-sum[x2][y1-1]-sum[x1-1][y2]+sum[x1-1][y1-1]
+#첫번째 경우: 전체 직사각형을 세로로 분할한 경우.
+for i in range(1,m-1):
+    for j in range(i+1,m):
+        r1=sum_cal(1,1,n,i)
+        r2=sum_cal(1,i+1,n,j)
+        r3=sum_cal(1,j+1,n,m)
+
+        if ans<r1*r2*r3:
+            ans=r1*r2*r3
+
+# 두 번째 경우: 전체 직사각형을 가로로만 분할한 경우
+for i in range(1, n-1):
+    for j in range(i+1, n):
+        r1 = sum_cal(1, 1, i, m)
+        r2 = sum_cal(i+1, 1, j, m)
+        r3 = sum_cal(j+1, 1, n, m)
+        if ans < r1 * r2 * r3:
+            ans = r1 * r2 * r3
+ 
+# 세 번째 경우: 전체 세로 분할 후 우측 가로 분할한 경우
+for i in range(1, m):
+    for j in range(1, n):
+        r1 = sum_cal(1, 1, n, i)
+        r2 = sum_cal(1, i+1, j, m)
+        r3 = sum_cal(j+1, i+1, n, m)
+        if ans < r1 * r2 * r3:
+            ans = r1 * r2 * r3
+ 
+# 네 번째 경우: 전체 세로 분할 후 좌측 가로 분할한 경우
+for i in range(1, n):
+    for j in range(1, m):
+        r1 = sum_cal(1, 1, i, j)
+        r2 = sum_cal(i+1, 1, n, j)
+        r3 = sum_cal(1, j+1, n, m)
+        if ans < r1 * r2 * r3:
+            ans = r1 * r2 * r3
+ 
+# 다섯번 째 경우: 전체 가로 분할 후 하단 세로 분할한 경우
+for i in range(1, n):
+    for j in range(1, m):
+        r1 = sum_cal(1, 1, i, m)
+        r2 = sum_cal(i+1, 1, n, j)
+        r3 = sum_cal(i+1, j+1, n, m)
+        if ans < r1 * r2 * r3:
+            ans = r1 * r2 * r3
+ 
+# 여섯번 째 경우: 전체 가로 분할 후 상단 세로 분할한 경우
+for i in range(1, n):
+    for j in range(1, m):
+        r1 = sum_cal(1, 1, i, j)
+        r2 = sum_cal(1, j+1, i, m)
+        r3 = sum_cal(i+1, 1, n, m)
+        if ans < r1 * r2 * r3:
+            ans = r1 * r2 * r3
+ 
+print(ans)
