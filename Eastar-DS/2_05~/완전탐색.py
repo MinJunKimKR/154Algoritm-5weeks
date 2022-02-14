@@ -482,12 +482,51 @@ while(queue):
         break
     
 
-
-
-
-
-
-
+#2251
+import collections
+A,B,C = map(int,input().split())
+queue,visited = collections.deque([[0,0,C]]),[]
+while(queue):
+    a,b,c = queue.popleft()
+    if([a,b,c] in visited):
+        continue
+    visited.append([a,b,c])
+    #A에서 물을 주는경우
+    if(a != 0 and b<B):
+        if(a+b <= B):
+            queue.append([0,a+b,c])
+        else:
+            queue.append([a+b-B,B,c])
+    if(a != 0 and c<C):
+        if(a+c <= C):
+            queue.append([0,b,a+c])
+        else:
+            queue.append([a+c-C,b,C])
+    #B에서 물을 주는경우
+    if(b != 0 and a<A):
+        if(b+a <= A):
+            queue.append([a+b,0,c])
+        else:
+            queue.append([A,a+b-A,c])
+    if(b != 0 and c<C):
+        if(b+c <= C):
+            queue.append([a,0,b+c])
+        else:
+            queue.append([a,b+c-C,C])
+    #C에서 물을 주는경우
+    if(c != 0 and a<A):
+        if(c+a <= A):
+            queue.append([a+c,b,0])
+        else:
+            queue.append([A,b,a+c-A])
+    if(c != 0 and b<B):
+        if(b+c <= B):
+            queue.append([a,b+c,0])
+        else:
+            queue.append([a,B,b+c-B])
+output = [w for w in visited if w[0]==0]
+output.sort(key = lambda x : x[2])
+print(' '.join([str(a[2]) for a in output]))
 
 
 
