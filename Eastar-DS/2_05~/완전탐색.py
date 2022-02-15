@@ -529,10 +529,81 @@ output.sort(key = lambda x : x[2])
 print(' '.join([str(a[2]) for a in output]))
 
 
+#2186 pypy로 제출해야함 bfs는 메모리초과뜬다. dfs에 메모이제이션을 사용해야한다고함. 머리터진다...
+#최종
+import sys
+N,M,K = map(int,sys.stdin.readline().split())
+alpha = []
+for _ in range(N):
+    alpha.append(sys.stdin.readline().rstrip())
+answer = sys.stdin.readline()
+length = len(answer) - 1
+visited = [[[-1]*length for _ in range(M)] for _ in range(N)]
+def dfs(i,j,l):
+    if(visited[i][j][l] >= 0):
+        return visited[i][j][l]
+    if(l == length - 1):
+        return 1    
+    visited[i][j][l] = 0
+    for x in range(1,K+1):
+        if((i-x)>=0 and alpha[i-x][j] == answer[l+1]):
+            visited[i][j][l] += dfs(i-x,j,l+1)
+        if((i+x)<N and alpha[i+x][j] == answer[l+1]):
+            visited[i][j][l] += dfs(i+x,j,l+1)
+    for y in range(1,K+1):
+        if((j-y)>=0 and alpha[i][j-y] == answer[l+1]):
+            visited[i][j][l] += dfs(i,j-y,l+1)
+        if((j+y)<M and alpha[i][j+y] == answer[l+1]):
+            visited[i][j][l] += dfs(i,j+y,l+1)    
+    return visited[i][j][l]
+output = 0
+for i in range(N):
+    for j in range(M):
+        if alpha[i][j] == answer[0]:
+            output += dfs(i,j,0)
+print(output)
 
+#dfs
+import sys,collections
+input = sys.stdin.readline
 
+N,M,K = map(int,input().split())
+alpha = []
+for _ in range(N):
+    alpha.append(input().rstrip())
+answer = input().rstrip()
+length = len(answer)
 
+visited = [[[-1]*length for _ in range(M)] for _ in range(N)]
 
+def dfs(i,j,l):
+    if(visited[i][j][l] >= 0):
+        return visited[i][j][l]
+    if(l == length - 1):
+        return 1
+    
+    #-1로 초기화했었으므로
+    visited[i][j][l] = 0
+    for x in range(1,K+1):
+        if((i-x)>=0 and alpha[i-x][j] == answer[l+1]):
+            visited[i][j][l] += dfs(i-x,j,l+1)
+        if((i+x)<N and alpha[i+x][j] == answer[l+1]):
+            visited[i][j][l] += dfs(i+x,j,l+1)
+    for y in range(1,K+1):
+        if((j-y)>=0 and alpha[i][j-y] == answer[l+1]):
+            visited[i][j][l] += dfs(i,j-y,l+1)
+        if((j+y)<M and alpha[i][j+y] == answer[l+1]):
+            visited[i][j][l] += dfs(i,j+y,l+1)
+    
+    return visited[i][j][l]
+
+output = 0
+for i in range(N):
+    for j in range(M):
+        if alpha[i][j] == answer[0]:
+            output += dfs(i,j,0)
+
+print(output)
 
 
 
