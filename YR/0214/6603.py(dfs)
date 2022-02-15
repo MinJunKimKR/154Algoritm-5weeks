@@ -1,0 +1,34 @@
+#6603
+#실버2
+
+#dfs로 풀어보자
+
+
+def dfs(start,cnt):
+    if cnt==6:
+        print(*answer)
+        return
+    
+    for i in range(cnt,k):
+        answer.append(arr[i])
+        dfs(start+1,i+1)
+        answer.pop()
+        
+    
+    
+
+
+while(1):
+    arr=list(map(int,input().split()))
+    
+    if arr[0]==0:
+        break
+    k=arr[0]
+    arr=arr[1:]
+    answer=[] #set으로 구현
+    dfs(0,0)
+    print()
+    
+    
+    
+    
