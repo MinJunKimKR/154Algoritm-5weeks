@@ -482,6 +482,332 @@ while(queue):
         break
     
 
+#2251
+import collections
+A,B,C = map(int,input().split())
+queue,visited = collections.deque([[0,0,C]]),[]
+while(queue):
+    a,b,c = queue.popleft()
+    if([a,b,c] in visited):
+        continue
+    visited.append([a,b,c])
+    #A에서 물을 주는경우
+    if(a != 0 and b<B):
+        if(a+b <= B):
+            queue.append([0,a+b,c])
+        else:
+            queue.append([a+b-B,B,c])
+    if(a != 0 and c<C):
+        if(a+c <= C):
+            queue.append([0,b,a+c])
+        else:
+            queue.append([a+c-C,b,C])
+    #B에서 물을 주는경우
+    if(b != 0 and a<A):
+        if(b+a <= A):
+            queue.append([a+b,0,c])
+        else:
+            queue.append([A,a+b-A,c])
+    if(b != 0 and c<C):
+        if(b+c <= C):
+            queue.append([a,0,b+c])
+        else:
+            queue.append([a,b+c-C,C])
+    #C에서 물을 주는경우
+    if(c != 0 and a<A):
+        if(c+a <= A):
+            queue.append([a+c,b,0])
+        else:
+            queue.append([A,b,a+c-A])
+    if(c != 0 and b<B):
+        if(b+c <= B):
+            queue.append([a,b+c,0])
+        else:
+            queue.append([a,B,b+c-B])
+output = [w for w in visited if w[0]==0]
+output.sort(key = lambda x : x[2])
+print(' '.join([str(a[2]) for a in output]))
+
+
+#2186 pypy로 제출해야함 bfs는 메모리초과뜬다. dfs에 메모이제이션을 사용해야한다고함. 머리터진다...
+#최종
+import sys
+N,M,K = map(int,sys.stdin.readline().split())
+alpha = []
+for _ in range(N):
+    alpha.append(sys.stdin.readline().rstrip())
+answer = sys.stdin.readline()
+length = len(answer) - 1
+visited = [[[-1]*length for _ in range(M)] for _ in range(N)]
+def dfs(i,j,l):
+    if(visited[i][j][l] >= 0):
+        return visited[i][j][l]
+    if(l == length - 1):
+        return 1    
+    visited[i][j][l] = 0
+    for x in range(1,K+1):
+        if((i-x)>=0 and alpha[i-x][j] == answer[l+1]):
+            visited[i][j][l] += dfs(i-x,j,l+1)
+        if((i+x)<N and alpha[i+x][j] == answer[l+1]):
+            visited[i][j][l] += dfs(i+x,j,l+1)
+    for y in range(1,K+1):
+        if((j-y)>=0 and alpha[i][j-y] == answer[l+1]):
+            visited[i][j][l] += dfs(i,j-y,l+1)
+        if((j+y)<M and alpha[i][j+y] == answer[l+1]):
+            visited[i][j][l] += dfs(i,j+y,l+1)    
+    return visited[i][j][l]
+output = 0
+for i in range(N):
+    for j in range(M):
+        if alpha[i][j] == answer[0]:
+            output += dfs(i,j,0)
+print(output)
+
+#dfs
+import sys,collections
+input = sys.stdin.readline
+
+N,M,K = map(int,input().split())
+alpha = []
+for _ in range(N):
+    alpha.append(input().rstrip())
+answer = input().rstrip()
+length = len(answer)
+
+visited = [[[-1]*length for _ in range(M)] for _ in range(N)]
+
+def dfs(i,j,l):
+    if(visited[i][j][l] >= 0):
+        return visited[i][j][l]
+    if(l == length - 1):
+        return 1
+    
+    #-1로 초기화했었으므로
+    visited[i][j][l] = 0
+    for x in range(1,K+1):
+        if((i-x)>=0 and alpha[i-x][j] == answer[l+1]):
+            visited[i][j][l] += dfs(i-x,j,l+1)
+        if((i+x)<N and alpha[i+x][j] == answer[l+1]):
+            visited[i][j][l] += dfs(i+x,j,l+1)
+    for y in range(1,K+1):
+        if((j-y)>=0 and alpha[i][j-y] == answer[l+1]):
+            visited[i][j][l] += dfs(i,j-y,l+1)
+        if((j+y)<M and alpha[i][j+y] == answer[l+1]):
+            visited[i][j][l] += dfs(i,j+y,l+1)
+    
+    return visited[i][j][l]
+
+output = 0
+for i in range(N):
+    for j in range(M):
+        if alpha[i][j] == answer[0]:
+            output += dfs(i,j,0)
+
+print(output)
+
+
+#3108 qttqqtqtqtqtqtqt
+
+#아직 못
+import sys
+input = sys.stdin.readline
+N = int(input())
+elements,output = [],0
+for i in range(1,N+1):
+    x1,y1,x2,y2 = map(int,input().split())
+    elements.append([x1,y1,x2,y2,i])
+    if(x1 == 0 or x2 ==0):
+        if(y1<=0 and y2>=0):
+            output = -1
+    if(y1 == 0 or y2 ==0):
+        if(x1<=0 and x2>=0):
+            output = -1
+
+for i in range(N-1):
+    x1,y1,x2,y2,g1 = elements[i]
+    for j in range(i+1,N):
+        a1,b1,a2,b2,g2 = elements[j]
+        if(g1 == g2):
+            continue
+        if(x1<=a1<=x2 or x1<=a2<=x2):
+            if(y1<=b1<=y2 or y1<=b2<=y2):
+                if not (x1 < a1 and a2 < x2 and y1 < b1 and b2 < y2):
+                    elements[j][4] = g1
+
+output += len(set([e[4] for e in elements]))
+print(output)
+
+        
+#5014 3분컷
+import collections
+F,S,G,U,D = map(int,input().split())
+queue,visited = collections.deque([[S,0]]), [0]*(F+1)
+while(queue):
+    s,o = queue.popleft()
+    if(s == G):
+        print(o)
+        break
+    if(visited[s]):
+        continue
+    visited[s] = 1
+    if(s-D>0):
+        queue.append([s-D,o+1])
+    if(s+U<=F):
+        queue.append([s+U,o+1])
+if(s != G):
+    print('use the stairs')
+
+
+#1759
+import itertools
+L,C = map(int,input().split())
+alpha = sorted(input().rstrip().split())
+#x:모음 y:자음
+x,y = [],[]
+for i in range(C):
+    if alpha[i] in ['a','e','i','o','u']:
+        x.append(i)
+    else:
+        y.append(i)
+#combinations를 이용하면 증가하는 순서대로 나온다.
+for element in itertools.combinations(list(range(C)), L):
+    #n:모음 m:자음
+    n,m = 0,0
+    #모음이 한개, 자음이 두개이상 있어야한다.
+    for index in element:
+        if(index in x):
+            n+=1
+        else:
+            m+=1
+    if(n==0 or m<2):
+        continue
+    #만족하면 출력    
+    print(''.join([alpha[i] for i in element]))
+
+
+#2580
+#사각형을 탐색해보니 한군데만 비어있으면 숫자채워주기
+def square(x,y):
+    nums = [0]*10
+    for i in range(3):
+        for j in range(3):
+            if sdoku[x+i][y+j] == 0:
+                nums[0] = [i,j]
+            else:
+                nums[sdoku[x+i][y+j]] = 1
+    if(sum(nums[1:]) < 8):
+        a,b = nums[0]
+        #가로세로에 해당숫자가 없으면 그냥 넣어버리기
+        for num in range(1,10):
+            if num not in sdoku[x+a]:
+                if num not in [sdoku[i][y+b] for i in range(9)]:
+                    value = num
+                    break
+        sdoku[x+a][y+b] = value
+    elif(sum(nums[1:]) == 8):
+        a,b = nums[0]
+        for i in range(1,10):
+            if(nums[i] == 0):
+                value = i
+                break
+        sdoku[x+a][y+b] = value
+        visit_square.remove([x,y])
+    elif(sum(nums[1:]) == 9):
+        visit_square.remove([x,y])
+
+def hor(x):
+    nums = [0]*10
+    for i in range(9):
+        if sdoku[x][i] == 0:
+            nums[0] = i
+        else:
+            nums[sdoku[x][i]] = 1
+    if(sum(nums[1:]) < 8):
+        a = nums[0]
+        for num in range(1,10):
+            if num not in [sdoku[i][a] for i in range(9)]:
+                if num not in [sdoku[x - x%3 + i][a - a%3 + j] for i in range(3) for j in range(3)]:
+                    value = num
+                    break
+        sdoku[x][a] = value
+    elif(sum(nums[1:]) == 8):
+        a = nums[0]
+        for i in range(1,10):
+            if(nums[i] == 0):
+                value = i
+                break
+        sdoku[x][a] = value
+        visit_hor.remove(x)
+    elif(sum(nums[1:]) == 9):
+        visit_hor.remove(x)
+
+def ver(y):
+    nums = [0]*10
+    for i in range(9):
+        if sdoku[i][y] == 0:
+            nums[0] = i
+        else:
+            nums[sdoku[i][y]] = 1
+    if(sum(nums[1:]) < 8):
+        a = nums[0]
+        for num in range(1,10):
+            if num not in sdoku[a] :
+                if num not in [sdoku[a - a%3 + i][y - y%3 + j] for i in range(3) for j in range(3)]:
+                    value = num
+                    break
+        sdoku[a][y] = value
+    elif(sum(nums[1:]) == 8):
+        a = nums[0]
+        for i in range(1,10):
+            if(nums[i] == 0):
+                value = i
+                break
+        sdoku[a][y] = value
+        visit_ver.remove(y)
+    elif(sum(nums[1:]) == 9):
+        visit_ver.remove(y)
+
+#다채운것들은 안해도되게
+visit_square = [[i,j] for i in [0,3,6] for j in [0,3,6]]
+visit_hor = list(range(9))
+visit_ver = list(range(9))
+
+sdoku = []
+for _ in range(9):
+    sdoku.append(list(map(int,input().split())))
+
+while(visit_square or visit_hor or visit_ver):
+    tmp1, tmp2, tmp3 = visit_square[:], visit_hor[:], visit_ver[:]
+    for i,j in tmp1:
+        square(i,j)
+    for i in tmp2:
+        hor(i)
+    for j in tmp3:
+        ver(j)
+
+for line in sdoku:
+    print(line)
+
+
+
+
+
+
+
+
+
+
+sdoku = [[0, 3, 5, 4, 6, 9, 2, 7, 8],
+ [7, 8, 2, 1, 0, 5, 6, 0, 9],
+ [0, 6, 0, 2, 7, 8, 1, 3, 5],
+ [3, 2, 1, 0, 4, 6, 8, 9, 7],
+ [8, 0, 4, 9, 1, 3, 5, 0, 6],
+ [5, 9, 6, 8, 2, 0, 4, 1, 3],
+ [9, 1, 7, 6, 5, 2, 0, 8, 0],
+ [6, 0, 3, 7, 0, 1, 9, 5, 2],
+ [2, 5, 8, 3, 9, 4, 7, 6, 0]]
+
+
 
 
 
