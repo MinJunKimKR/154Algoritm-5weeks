@@ -30,6 +30,28 @@ def isPrime(x):
     return True
 
 
+#에라토스테네스의 체
+def primes(N):
+    import math
+    if(N == 1):
+        return []
+    table = [0,0] + [1]*(N-1)
+    primes = []
+    start = 2
+    while(start <= math.floor(N**0.5)):
+        primes.append(start)
+        for i in range(start,N+1,start):
+            table[i] = 0
+        for i in range(start, N+1):
+            if table[i] == 1:
+                start = i
+                break
+    for i in range(start, N+1):
+        if table[i] == 1:
+            primes.append(i)
+    return primes
+
+
 # if else문 두번째 for문 안에 첫번째 for문의 인자를 사용해야 else가 제대로 작동하는듯.
 for i in range(12):
     for s in str(i):

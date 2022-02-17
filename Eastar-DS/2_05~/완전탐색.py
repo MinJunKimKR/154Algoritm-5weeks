@@ -606,13 +606,500 @@ for i in range(N):
 print(output)
 
 
+#3108 
+import sys, collections
+input = sys.stdin.readline
+
+N = int(input())
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
+queue,starts = collections.deque([]),[]
+graph = [[0]*2001 for _ in range(2001)]
+
+c = [[0]*2001 for _ in range(2001)]
+
+for _ in range(N):
+    x1,y1,x2,y2 = map(int,input().split())
+    x1,y1,x2,y2 = 2*x1+1000,2*y1+1000,2*x2+1000,2*y2+1000
+    starts.append([x1,y1])
+    for i in range(x1,x2+1):
+        if i==x1 or i==x2:
+            for j in range(y1, y2+1):
+                graph[i][j] = 1
+        else:
+            graph[i][y1] = 1
+            graph[i][y2] = 1
+    # for x in range(x1,x2+1):
+    #     graph[x][y1], graph[x][y2] = 1,1
+    # for y in range(y1+1,y2):
+    #     graph[x1][y], graph[x2][y] = 1,1
+
+if graph[1000][1000] == 1:
+    output = -1
+else:
+    output = 0
+
+for a,b in starts:
+    if(c[a][b] == 0):
+        queue.append([a,b])
+        c[a][b] = 1
+        while(queue):
+            x,y = queue.popleft()
+            for t in range(4):
+                i,j = x+dx[t],y+dy[t]
+                if(0<=i<2001) and (0<=j<2001) and (graph[i][j] == 1) and (c[i][j] == 0):
+                    c[i][j] = 1
+                    queue.append([i,j])
+        output += 1        
+print(output)
+
+#이게 메모리 적게쓰고 빠른거같은데 왜 더느리냐ㅠㅠㅠㅠㅠ
+for a,b in starts:
+    if(graph[a][b] == 0):
+        output -= 1
+        continue
+    queue.append([a,b])
+    while(queue):
+        x,y = queue.popleft()
+        graph[x][y] = 0
+        for t in range(4):
+            i,j = x+dx[t],y+dy[t]
+            if(0<=i<2001) and (0<=j<2001) and (graph[i][j] == 1):
+                queue.append([i,j])
+                
+print(output)
+
+#나의 dfs풀이 bfs는 오류나고 이건 겁나 빠르네 왤까
+import sys, collections
+sys.setrecursionlimit(100000)
+input = sys.stdin.readline
+N = int(input())
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
+queue,starts = collections.deque([]),[]
+graph = [[0]*2001 for _ in range(2001)]
+for _ in range(N):
+    x1,y1,x2,y2 = map(int,input().split())
+    x1,y1,x2,y2 = 2*x1+1000,2*y1+1000,2*x2+1000,2*y2+1000
+    starts.append([x1,y1])
+    for i in range(x1,x2+1):
+        if i==x1 or i==x2:
+            for j in range(y1, y2+1):
+                graph[i][j] = 1
+        else:
+            graph[i][y1] = 1
+            graph[i][y2] = 1            
+if graph[1000][1000] == 1:
+    output = N-1
+else:
+    output = N
+def dfs(x,y):
+    graph[x][y] = 0
+    for t in range(4):
+        i,j = x+dx[t],y+dy[t]
+        if(0<=i<2001) and (0<=j<2001) and (graph[i][j] == 1):
+            dfs(i,j)
+for a,b in starts:
+    if(graph[a][b] == 0):
+        output -= 1
+        continue
+    dfs(a,b)    
+print(output)
+
+
+
+
+#5014 3분컷
+import collections
+F,S,G,U,D = map(int,input().split())
+queue,visited = collections.deque([[S,0]]), [0]*(F+1)
+while(queue):
+    s,o = queue.popleft()
+    if(s == G):
+        print(o)
+        break
+    if(visited[s]):
+        continue
+    visited[s] = 1
+    if(s-D>0):
+        queue.append([s-D,o+1])
+    if(s+U<=F):
+        queue.append([s+U,o+1])
+if(s != G):
+    print('use the stairs')
+
+
+#1759
+import itertools
+L,C = map(int,input().split())
+alpha = sorted(input().rstrip().split())
+#x:모음 y:자음
+x,y = [],[]
+for i in range(C):
+    if alpha[i] in ['a','e','i','o','u']:
+        x.append(i)
+    else:
+        y.append(i)
+#combinations를 이용하면 증가하는 순서대로 나온다.
+for element in itertools.combinations(list(range(C)), L):
+    #n:모음 m:자음
+    n,m = 0,0
+    #모음이 한개, 자음이 두개이상 있어야한다.
+    for index in element:
+        if(index in x):
+            n+=1
+        else:
+            m+=1
+    if(n==0 or m<2):
+        continue
+    #만족하면 출력    
+    print(''.join([alpha[i] for i in element]))
+
+
+#2580
+#사각형을 탐색해보니 한군데만 비어있으면 숫자채워주기
+def square(x,y):
+    nums = [0]*10
+    for i in range(3):
+        for j in range(3):
+            if sdoku[x+i][y+j] == 0:
+                nums[0] = [i,j]
+            else:
+                nums[sdoku[x+i][y+j]] = 1
+    if(sum(nums[1:]) < 8):
+        a,b = nums[0]
+        #가로세로에 해당숫자가 없으면 그냥 넣어버리기
+        for num in range(1,10):
+            if num not in sdoku[x+a]:
+                if num not in [sdoku[i][y+b] for i in range(9)]:
+                    value = num
+                    break
+        sdoku[x+a][y+b] = value
+    elif(sum(nums[1:]) == 8):
+        a,b = nums[0]
+        for i in range(1,10):
+            if(nums[i] == 0):
+                value = i
+                break
+        sdoku[x+a][y+b] = value
+        visit_square.remove([x,y])
+    elif(sum(nums[1:]) == 9):
+        visit_square.remove([x,y])
+
+def hor(x):
+    nums = [0]*10
+    for i in range(9):
+        if sdoku[x][i] == 0:
+            nums[0] = i
+        else:
+            nums[sdoku[x][i]] = 1
+    if(sum(nums[1:]) < 8):
+        a = nums[0]
+        for num in range(1,10):
+            if num not in [sdoku[i][a] for i in range(9)]:
+                if num not in [sdoku[x - x%3 + i][a - a%3 + j] for i in range(3) for j in range(3)]:
+                    value = num
+                    break
+        sdoku[x][a] = value
+    elif(sum(nums[1:]) == 8):
+        a = nums[0]
+        for i in range(1,10):
+            if(nums[i] == 0):
+                value = i
+                break
+        sdoku[x][a] = value
+        visit_hor.remove(x)
+    elif(sum(nums[1:]) == 9):
+        visit_hor.remove(x)
+
+def ver(y):
+    nums = [0]*10
+    for i in range(9):
+        if sdoku[i][y] == 0:
+            nums[0] = i
+        else:
+            nums[sdoku[i][y]] = 1
+    if(sum(nums[1:]) < 8):
+        a = nums[0]
+        for num in range(1,10):
+            if num not in sdoku[a] :
+                if num not in [sdoku[a - a%3 + i][y - y%3 + j] for i in range(3) for j in range(3)]:
+                    value = num
+                    break
+        sdoku[a][y] = value
+    elif(sum(nums[1:]) == 8):
+        a = nums[0]
+        for i in range(1,10):
+            if(nums[i] == 0):
+                value = i
+                break
+        sdoku[a][y] = value
+        visit_ver.remove(y)
+    elif(sum(nums[1:]) == 9):
+        visit_ver.remove(y)
+
+#다채운것들은 안해도되게
+visit_square = [[i,j] for i in [0,3,6] for j in [0,3,6]]
+visit_hor = list(range(9))
+visit_ver = list(range(9))
+
+sdoku = []
+for _ in range(9):
+    sdoku.append(list(map(int,input().split())))
+
+while(visit_square or visit_hor or visit_ver):
+    tmp1, tmp2, tmp3 = visit_square[:], visit_hor[:], visit_ver[:]
+    for i,j in tmp1:
+        square(i,j)
+    for i in tmp2:
+        hor(i)
+    for j in tmp3:
+        ver(j)
+
+for line in sdoku:
+    print(line)
+
+
+
+sdoku = [[0, 3, 5, 4, 6, 9, 2, 7, 8],
+ [7, 8, 2, 1, 0, 5, 6, 0, 9],
+ [0, 6, 0, 2, 7, 8, 1, 3, 5],
+ [3, 2, 1, 0, 4, 6, 8, 9, 7],
+ [8, 0, 4, 9, 1, 3, 5, 0, 6],
+ [5, 9, 6, 8, 2, 0, 4, 1, 3],
+ [9, 1, 7, 6, 5, 2, 0, 8, 0],
+ [6, 0, 3, 7, 0, 1, 9, 5, 2],
+ [2, 5, 8, 3, 9, 4, 7, 6, 0]]
+
+
+#1987
+#set으로 변경, dx,dy 설정하는게 속도차이가 꽤 나는듯.
+R,C = map(int,input().split())
+graph,output = [],0
+for _ in range(R):
+    graph.append(input())
+visited = set(graph[0][0])
+dx,dy = [1,-1,0,0], [0,0,1,-1]
+def dfs(i,j,c):
+    global output
+    output = max(output,c)
+    if output == 26:
+        return
+    for m in range(4):
+        x,y= i+dx[m],j+dy[m]
+        if (0<=x<R) and (0<=y<C) and (graph[x][y] not in visited):
+            visited.add(graph[x][y])
+            dfs(x,y,c+1)
+            visited.remove(graph[x][y])
+                
+dfs(0,0,1)
+print(output)
+
+#
+R,C = map(int,input().split())
+graph,output = [],0
+for _ in range(R):
+    graph.append(input().rstrip())
+visited = [graph[0][0]]
+dx,dy = [1,-1,0,0], [0,0,1,-1]
+def dfs(i,j,c):
+    global output
+    output = max(output,c)
+    if output == 26:
+        return
+    for m in range(4):
+        x,y= i+dx[m],j+dy[m]
+        if (0<=x<R) and (0<=y<C) and (graph[x][y] not in visited):
+            visited.append(graph[x][y])
+            dfs(x,y,c+1)
+            visited.pop()
+dfs(0,0,1)
+print(output)
+
+
+#6603
+import itertools
+stop = 1
+while(stop):
+    tmp = input().rstrip().split()
+    k,s = int(tmp[0]), tmp[1:]
+    c = itertools.combinations(list(range(k)),6)
+    for order in c:
+        print(' '.join([s[i] for i in order]))
+    print('')
+    stop = k
+
+
+#1182
+n,s = map(int,input().split())
+nums = sorted(list(map(int,input().split())))
+output = 0
+
+for d in range(n):
+    start = [nums[d]]
+
+#모든 부분집합 탐색
+import itertools
+n,s = map(int,input().split())
+nums = list(map(int,input().split()))
+output = 0
+for d in range(1,n+1):
+    for order in itertools.combinations(list(range(n)),d):
+        tmp = 0
+        for o in order:
+            tmp += nums[o]
+        if tmp == s :
+            output += 1
+print(output)
+
+
+#2003
+import collections
+N,M = map(int,input().split())
+nums = list(map(int,input().split()))
+output = 0
+i = 1
+summ = collections.deque([0])
+while(i <= N):
+    if sum([nums[i] for i in summ]) < M :
+        summ.append(i)
+        i += 1
+    elif sum([nums[i] for i in summ]) == M :
+        output += 1
+        summ.popleft()
+    else:
+        summ.popleft()
+print(output)
+        
+
+#1806
+#윈도우사이즈로 하자. 초기 윈도우사이즈는 S값과 최댓값사이의 관계로.
+#summ을 만드는데 시간이 많이드는것같다. 처음부터 현재까지의 합들로 구성하고 뺄샘으로 비교하자.
+N,S = map(int,input().split())
+nums = list(map(int,input().split()))
+size = S//max(nums)
+summ = [0]*(N+1)
+for i in range(N):
+    summ[i+1] = summ[i] + nums[i]
+def f():
+    s,e,o = 0,size,N+1
+    while(s <= N-size):
+        if summ[e] - summ[s] >= S:
+            o = min(o, e-s)
+            s+=1
+        else:
+            if(e < N):
+                e += 1
+            else:
+                break
+    if o != N+1 :
+        print(o)
+    else:
+        print(0)
+f()
+
+
+#1644
+#에라토스테네스의 체
+import math
+N = int(input())
+if(N==1):
+    print(0)
+    exit()
+table = [0,0] + [1]*(N-1)
+primes = []
+start = 2
+while(start <= math.floor(N**0.5)):
+    primes.append(start)
+    for i in range(start,N+1,start):
+        table[i] = 0
+    for i in range(start, N+1):
+        if table[i] == 1:
+            start = i
+            break
+for i in range(start, N+1):
+    if table[i] == 1:
+        primes.append(i)
+
+length = len(primes)
+summ = [0]*(length+1)
+for i in range(length):
+    summ[i+1] = summ[i] + primes[i]
+
+output = 0
+for i in range(length):
+    for j in range(i+1,length+1):
+        if(summ[j] - summ[i] == N):
+            output += 1
+        elif(summ[j] - summ[i] > N):
+            break
+
+print(output)
+
+
+#1261 BFS로 벽없으면 왼쪽에 벽있으면 오른쪽에 추가
+import sys,collections
+input = sys.stdin.readline
+N,M = map(int,input().split())
+graph = [[int(s) for s in input().rstrip()] for _ in range(M)]
+visited = [[1]*N for _ in range(M)]
+dx,dy = [-1,1,0,0], [0,0,-1,1]
+queue = collections.deque([[0,0,0]])
+output = 0
+while(queue):
+    x,y,c = queue.popleft()
+    if x == M-1 and y == N-1:
+        print(c)
+        break
+    if(visited[x][y]):
+        visited[x][y] = 0
+        for t in range(4):
+            i,j = x+dx[t], y+dy[t]
+            if(0<=i<M) and (0<=j<N):
+                if(graph[i][j] == 1):
+                    queue.append([i,j,c+1])
+                else:
+                    queue.appendleft([i,j,c])
+
+#dfs 시간초과
+count = N*M
+def dfs(i,j,c):
+    global count
+    if c == count:
+        return
+    if i==M-1 and j==N-1 :
+        count = c
+        return
+    if(visited[i][j]):
+        visited[i][j] = 0
+        for t in range(4):
+            x,y = i+dx[t], j+dy[t]
+            if (0<=x<M) and (0<=y<N):
+                if graph[i][j] == 1:
+                    dfs(x,y,c+1)
+                else:
+                    dfs(x,y,c)
+        visited[i][j] = 1
+dfs(0,0,0)
+print(count)
 
 
 
 
 
 
-            
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
