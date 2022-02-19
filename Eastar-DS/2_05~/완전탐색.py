@@ -757,109 +757,64 @@ for element in itertools.combinations(list(range(C)), L):
 
 
 #2580
-#사각형을 탐색해보니 한군데만 비어있으면 숫자채워주기
-def square(x,y):
-    nums = [0]*10
+
+
+
+#사각형을 탐색해보니 한군데만 비어있으면 숫자채워주기. 이걸... 초딩이푼다고...? pypy제출. python은 82%.
+graph = [input().rstrip().split() for _ in range(9)]
+queue = []
+for i in range(9):
+    for j in range(9):
+        if graph[i][j] == '0':
+            queue.append([i,j])
+            
+def check(a,b):
+    nums = [str(i) for i in range(1,10)]
+    #사각형안
+    x,y = a-a%3, b-b%3
     for i in range(3):
         for j in range(3):
-            if sdoku[x+i][y+j] == 0:
-                nums[0] = [i,j]
-            else:
-                nums[sdoku[x+i][y+j]] = 1
-    if(sum(nums[1:]) < 8):
-        a,b = nums[0]
-        #가로세로에 해당숫자가 없으면 그냥 넣어버리기
-        for num in range(1,10):
-            if num not in sdoku[x+a]:
-                if num not in [sdoku[i][y+b] for i in range(9)]:
-                    value = num
-                    break
-        sdoku[x+a][y+b] = value
-    elif(sum(nums[1:]) == 8):
-        a,b = nums[0]
-        for i in range(1,10):
-            if(nums[i] == 0):
-                value = i
-                break
-        sdoku[x+a][y+b] = value
-        visit_square.remove([x,y])
-    elif(sum(nums[1:]) == 9):
-        visit_square.remove([x,y])
-
-def hor(x):
-    nums = [0]*10
+            if graph[x+i][y+j] in nums:
+                nums.remove(graph[x+i][y+j])
+    #가로
+    for j in range(9):
+        if graph[a][j] in nums:
+            nums.remove(graph[a][j])
+    #세로
     for i in range(9):
-        if sdoku[x][i] == 0:
-            nums[0] = i
-        else:
-            nums[sdoku[x][i]] = 1
-    if(sum(nums[1:]) < 8):
-        a = nums[0]
-        for num in range(1,10):
-            if num not in [sdoku[i][a] for i in range(9)]:
-                if num not in [sdoku[x - x%3 + i][a - a%3 + j] for i in range(3) for j in range(3)]:
-                    value = num
-                    break
-        sdoku[x][a] = value
-    elif(sum(nums[1:]) == 8):
-        a = nums[0]
-        for i in range(1,10):
-            if(nums[i] == 0):
-                value = i
-                break
-        sdoku[x][a] = value
-        visit_hor.remove(x)
-    elif(sum(nums[1:]) == 9):
-        visit_hor.remove(x)
+        if graph[i][b] in nums:
+            nums.remove(graph[i][b])
+    if(nums):        
+        return nums
+    else:
+        return 0
 
-def ver(y):
-    nums = [0]*10
-    for i in range(9):
-        if sdoku[i][y] == 0:
-            nums[0] = i
-        else:
-            nums[sdoku[i][y]] = 1
-    if(sum(nums[1:]) < 8):
-        a = nums[0]
-        for num in range(1,10):
-            if num not in sdoku[a] :
-                if num not in [sdoku[a - a%3 + i][y - y%3 + j] for i in range(3) for j in range(3)]:
-                    value = num
-                    break
-        sdoku[a][y] = value
-    elif(sum(nums[1:]) == 8):
-        a = nums[0]
-        for i in range(1,10):
-            if(nums[i] == 0):
-                value = i
-                break
-        sdoku[a][y] = value
-        visit_ver.remove(y)
-    elif(sum(nums[1:]) == 9):
-        visit_ver.remove(y)
+def dfs(n):
+    if n==len(queue):
+        for line in graph:
+            print(' '.join(line))
+        exit()
+    x,y = queue[n]
+    nums = check(x,y)
+    if not nums:
+        return
+    for num in nums:
+        graph[x][y] = num
+        dfs(n+1)
+        graph[x][y] = '0'
 
-#다채운것들은 안해도되게
-visit_square = [[i,j] for i in [0,3,6] for j in [0,3,6]]
-visit_hor = list(range(9))
-visit_ver = list(range(9))
-
-sdoku = []
-for _ in range(9):
-    sdoku.append(list(map(int,input().split())))
-
-while(visit_square or visit_hor or visit_ver):
-    tmp1, tmp2, tmp3 = visit_square[:], visit_hor[:], visit_ver[:]
-    for i,j in tmp1:
-        square(i,j)
-    for i in tmp2:
-        hor(i)
-    for j in tmp3:
-        ver(j)
-
-for line in sdoku:
-    print(line)
+dfs(0)
 
 
+graph = [['0', '3', '5', '4', '6', '9', '2', '7', '8'],
+ ['7', '8', '2', '1', '0', '5', '6', '0', '9'],
+ ['0', '6', '0', '2', '7', '8', '1', '3', '5'],
+ ['3', '2', '1', '0', '4', '6', '8', '9', '7'],
+ ['8', '0', '4', '9', '1', '3', '5', '0', '6'],
+ ['5', '9', '6', '8', '2', '0', '4', '1', '3'],
+ ['9', '1', '7', '6', '5', '2', '0', '8', '0'],
+ ['6', '0', '3', '7', '0', '1', '9', '5', '2'],
+ ['2', '5', '8', '3', '9', '4', '7', '6', '0']]
 
 sdoku = [[0, 3, 5, 4, 6, 9, 2, 7, 8],
  [7, 8, 2, 1, 0, 5, 6, 0, 9],
@@ -870,6 +825,47 @@ sdoku = [[0, 3, 5, 4, 6, 9, 2, 7, 8],
  [9, 1, 7, 6, 5, 2, 0, 8, 0],
  [6, 0, 3, 7, 0, 1, 9, 5, 2],
  [2, 5, 8, 3, 9, 4, 7, 6, 0]]
+
+# 제출용
+# import sys
+# input = sys.stdin.readline
+# graph = [input().split() for _ in range(9)]
+# queue = []
+# for i in range(9):
+#     for j in range(9):
+#         if graph[i][j] == '0':
+#             queue.append([i,j])
+# def check(a,b):
+#     nums = [str(i) for i in range(1,10)]
+#     x,y = a-a%3, b-b%3
+#     for i in range(3):
+#         for j in range(3):
+#             if graph[x+i][y+j] in nums:
+#                 nums.remove(graph[x+i][y+j])
+#     for j in range(9):
+#         if graph[a][j] in nums:
+#             nums.remove(graph[a][j])
+#     for i in range(9):
+#         if graph[i][b] in nums:
+#             nums.remove(graph[i][b])
+#     if(nums):        
+#         return nums
+#     else:
+#         return 0
+# def dfs(n):
+#     if n==len(queue):
+#         for line in graph:
+#             print(' '.join(line))
+#         exit()
+#     x,y = queue[n]
+#     nums = check(x,y)
+#     if not nums:
+#         return
+#     for num in nums:
+#         graph[x][y] = num
+#         dfs(n+1)
+#         graph[x][y] = '0'
+# dfs(0)
 
 
 #1987
@@ -931,13 +927,6 @@ while(stop):
 
 
 #1182
-n,s = map(int,input().split())
-nums = sorted(list(map(int,input().split())))
-output = 0
-
-for d in range(n):
-    start = [nums[d]]
-
 #모든 부분집합 탐색
 import itertools
 n,s = map(int,input().split())
@@ -1084,14 +1073,192 @@ dfs(0,0,0)
 print(count)
 
 
+#1208
+from itertools import combinations
+N,S = map(int,input().split())
+nums = list(map(int,input().split()))
+nums1 = nums[:N//2]
+nums2 = nums[N//2:]
+summ1, summ2 = [], []
+
+for i in range(len(nums1)+1):
+    c1 = combinations(nums1,i)
+    for sub1 in c1:
+        summ1.append(sum(sub1))
+for i in range(len(nums2)+1):
+    c2 = combinations(nums2,i)
+    for sub2 in c2:
+        summ2.append(sum(sub2))
+
+summ1,summ2 = sorted(summ1), sorted(summ2)
+
+l,r = 0, len(summ2)-1
+output = 0
+#왼쪽 오른쪽에서 아무것도 안뽑는경우 빼주자.
+if S == 0:
+    output -= 1
+    
+while l< len(summ1) and r>=0 :
+    summ = summ1[l] + summ2[r]    
+    if summ == S:
+        c1,c2 = 1,1
+        ll,rr = l,r
+        
+        #같은값인것들 체크해서 더해주기
+        l,r = l+1, r-1
+        while l < len(summ1) and summ1[l] == summ1[ll]:
+            c1 += 1
+            l += 1
+        while r >= 0 and summ2[r] == summ2[rr]:
+            c2 += 1
+            r -= 1
+        
+        output += (c1*c2)
+    
+    elif summ < S:
+        l += 1
+    else:
+        r -= 1
+
+print(output)
 
 
 
 
+#7453
+#그냥 dict로 해보자 ㅡㅡ; 되네. defaultdict 다신안써 ㅅㅄ
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+A,B,C,D = {},{},{},{}
+for _ in range(n):
+    a,b,c,d = map(int,input().split())
+    if a not in A:
+        A[a] = 1
+    else :
+        A[a] += 1
+    if b not in B:
+        B[b] = 1
+    else :
+        B[b] += 1
+    if c not in C:
+        C[c] = 1
+    else :
+        C[c] += 1
+    if d not in D:
+        D[d] = 1
+    else :
+        D[d] += 1
+
+summ1 = {}
+
+for k1 in A:
+    for k2 in B:
+        if k1+k2 not in summ1:
+            summ1[k1+k2] = A[k1]*B[k2]
+        else :
+            summ1[k1+k2] += A[k1]*B[k2]
+
+output = 0
+for k1 in C:
+    for k2 in D:
+        if -k1-k2 in summ1:
+            output += summ1[-k1-k2]*(C[k1]*D[k2])
+
+print(output)
+
+
+#이게 왜초과냐고 ㅡㅡ 뭐야 풀이코드들도 시간초과뜨네 pypy에서 해야하는구나.
+import sys,collections
+input = sys.stdin.readline
+
+n = int(input())
+A,B,C,D = collections.defaultdict(int),collections.defaultdict(int),collections.defaultdict(int),collections.defaultdict(int)
+for _ in range(n):
+    a,b,c,d = map(int,input().split())
+    A[a] += 1
+    B[b] += 1
+    C[c] += 1
+    D[d] += 1
+
+summ1 = collections.defaultdict(int)
+
+for k1 in A:
+    for k2 in B:
+        summ1[k1+k2] += A[k1]*B[k2]
+
+output = 0
+for k1 in C:
+    for k2 in D:
+        output += summ1[-k1-k2]*(C[k1]*D[k2])
+
+print(output)
 
 
 
+#2632
+import sys
+input = sys.stdin.readline
 
+s = int(input())
+m,n = map(int,input().split())
+p1,p2 = [],[]
+for _ in range(m):
+    p1.append(int(input()))
+for _ in range(n):
+    p2.append(int(input()))
+summ1, summ2 = {0:1, sum(p1):1}, sum(p2)
+p1,p2 = p1+p1, p2+p2
+
+
+for i in range(m):
+    for win in range(1,m):
+        tmp = sum(p1[i:i+win])
+        summ1[tmp] = summ1.get(tmp,0) + 1
+    
+output = 0
+
+for i in range(n):
+    for win in range(1,n):
+        tmp = sum(p2[i:i+win])
+        output += summ1.get(s-tmp,0)
+
+#왼쪽피자만 사용했을때 추가
+output += summ1.get(s,0)
+#한바퀴 다돈값 있으면 추가
+output += summ1.get(s-summ2,0)
+print(output)
+
+
+
+#2143 마지막!!! 꺄륵!!
+T = int(input())
+n = int(input())
+A = list(map(int,input().split()))
+m = int(input())
+B = list(map(int,input().split()))
+
+summ1, summ2 = [0]*(n+1),[0]*(m+1)
+for i in range(n):
+    summ1[i+1] = summ1[i] + A[i]
+for i in range(m):
+    summ2[i+1] = summ2[i] + B[i]
+
+summA = {}
+for i in range(n):
+    for j in range(i+1,n+1):
+        tmp = summ1[j] - summ1[i]
+        summA[tmp] = summA.get(tmp,0) + 1
+        
+output = 0
+for i in range(m):
+    for j in range(i+1, m+1):
+        tmp = summ2[j] - summ2[i]
+        if T-tmp in summA:
+            output += summA[T-tmp]
+
+print(output)
 
 
 
