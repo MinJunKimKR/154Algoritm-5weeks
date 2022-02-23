@@ -14,27 +14,21 @@ public class boj_2331 {
 
         List<Integer> list = new ArrayList<>();
         list.add(a);
-
         while (true) {
-            int temp = list.get(list.size() - 1);
-
+            int tmp = list.get(list.size() - 1);
             int result = 0;
-            // 어떤 수의 각 자리에 대해 p제곱만큼하여 각자리를 더한 값을 구함
-            while (temp != 0) {
-                result += (int) Math.pow(temp % 10, (double) p);
-                temp /= 10;
-            }
+            while (tmp != 0) {
+                result += (int) Math.pow(tmp % 10, p);
+                tmp /= 10;
 
-            // result가 이미 리스트에 포함되어있다면
-            // 그 result가 가리키는 인덱스를 반환
+            }
             if (list.contains(result)) {
                 int ans = list.indexOf(result);
                 System.out.println(ans);
                 break;
             }
+
             list.add(result);
         }
-
-
     }
 }
