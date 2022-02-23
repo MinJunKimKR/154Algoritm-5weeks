@@ -51,7 +51,6 @@ public class boj_1967 {
         dfs(maxIdx, 0);
         System.out.println(max);
 
-
     }
 
     static void dfs(int idx, int dist) {
