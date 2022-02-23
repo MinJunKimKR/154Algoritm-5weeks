@@ -34,6 +34,7 @@ public class boj_1167 {
             st = new StringTokenizer(br.readLine());
 
             int nodenum = Integer.parseInt(st.nextToken());
+
             String str;
             while (!(str = st.nextToken()).equals("-1")) {
                 int node = Integer.parseInt(str);
@@ -56,12 +57,13 @@ public class boj_1167 {
             max = len;
             node = v;
         }
+
         visit[v] = true;
 
         for (Node n : list[v]) {
             if (!visit[n.node]) {
-                dfs(n.node, n.dist + len);
                 visit[n.node] = true;
+                dfs(n.node, n.dist + len);
             }
         }
     }
