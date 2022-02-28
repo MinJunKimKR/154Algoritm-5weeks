@@ -1,38 +1,39 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class boj_11652 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        Map<Long, Integer> map = new HashMap<>();
 
+        long[] arr = new long[n];
         for (int i = 0; i < n; i++) {
-            long temp = Long.parseLong(br.readLine());
-            if (map.containsKey(temp))
-                map.put(temp, map.get(temp) + 1);
+            arr[i] = Long.parseLong(br.readLine());
+        }
+
+        Arrays.sort(arr);
+
+        long check = arr[0];
+        int count = 1;
+        int max = 1;
+
+        for (int i = 1; i < n; i++) {
+            if (arr[i] == arr[i - 1])
+                count++;
             else
-                map.put(temp, 1);
-        }
+                count = 1;
 
-        Set<Long> keys = map.keySet();
-        int count = 0;
-        long num = 0;
-
-        for (long key : keys) {
-            if (count < map.get(key)) {
-                count = map.get(key);
-                num = key;
-            } else if (count == map.get(key)) {
-                num = Math.min(num, key);
-                count = map.get(num);
+            if (count > max) {
+                max = count;
+                check = arr[i];
             }
+
         }
-        System.out.println(num);
+
+        System.out.println(check);
 
 
     }
