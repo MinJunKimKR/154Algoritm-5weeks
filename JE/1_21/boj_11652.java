@@ -13,28 +13,26 @@ public class boj_11652 {
         for (int i = 0; i < n; i++) {
             arr[i] = Long.parseLong(br.readLine());
         }
-
         Arrays.sort(arr);
 
-        long check = arr[0];
         int count = 1;
-        int max = 1;
+        long max = 1;
+        long check = arr[0];
 
         for (int i = 1; i < n; i++) {
-            if (arr[i] == arr[i - 1])
+            if (arr[i] == arr[i - 1]) {
                 count++;
-            else
+            } else {
                 count = 1;
+            }
 
             if (count > max) {
-                max = count;
                 check = arr[i];
+                max = count;
             }
 
         }
 
         System.out.println(check);
-
-
     }
 }
